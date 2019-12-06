@@ -1,0 +1,12 @@
+- args:
+    name: budget_allocations
+    table:
+      name: receipts
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: receipt_id
+        table:
+          name: receipt_budget_category_allocations
+          schema: public
+  type: create_array_relationship

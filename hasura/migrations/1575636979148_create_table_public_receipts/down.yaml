@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."receipts"
+  type: run_sql

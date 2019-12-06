@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."budget_categories"
+  type: run_sql

@@ -1,0 +1,20 @@
+- args:
+    permission:
+      allow_upsert: true
+      check:
+        user_Id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - email
+      - iban
+      - phone_number
+      - user_Id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: user_profiles
+      schema: public
+  type: create_insert_permission

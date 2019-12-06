@@ -1,0 +1,4 @@
+- args:
+    sql: ALTER TABLE "public"."receipt_budget_category_allocations" ADD COLUMN "created_at"
+      timestamptz NULL DEFAULT now();
+  type: run_sql

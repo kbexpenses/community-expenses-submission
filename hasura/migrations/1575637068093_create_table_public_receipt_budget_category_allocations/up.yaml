@@ -1,0 +1,15 @@
+- args:
+    sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  type: run_sql
+- args:
+    sql: CREATE TABLE "public"."receipt_budget_category_allocations"("id" uuid NOT
+      NULL DEFAULT gen_random_uuid(), "receipt_id" uuid NOT NULL, "budget_category_id"
+      uuid NOT NULL, "amount_cents" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN
+      KEY ("receipt_id") REFERENCES "public"."receipts"("id") ON UPDATE restrict ON
+      DELETE restrict, FOREIGN KEY ("budget_category_id") REFERENCES "public"."budget_categories"("id")
+      ON UPDATE restrict ON DELETE restrict);
+  type: run_sql
+- args:
+    name: receipt_budget_category_allocations
+    schema: public
+  type: add_existing_table_or_view

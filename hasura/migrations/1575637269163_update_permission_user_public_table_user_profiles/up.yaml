@@ -1,0 +1,20 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - email
+      - iban
+      - phone_number
+      - user_Id
+      - created_at
+      - updated_at
+      - id
+      filter:
+        user_Id:
+          _eq: X-Hasura-User-Id
+      limit: null
+    role: user
+    table:
+      name: user_profiles
+      schema: public
+  type: create_select_permission

@@ -1,0 +1,6 @@
+- args:
+    sql: COMMENT ON COLUMN "public"."user_profiles"."user_Id" IS E'null'
+  type: run_sql
+- args:
+    sql: alter table "public"."user_profiles" rename column "user_id" to "user_Id";
+  type: run_sql

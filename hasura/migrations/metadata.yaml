@@ -1,0 +1,198 @@
+allowlist: []
+functions: []
+query_collections: []
+remote_schemas: []
+tables:
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships: []
+  select_permissions: []
+  table: budget_categories
+  update_permissions: []
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships: []
+  select_permissions: []
+  table: financial_accounts
+  update_permissions: []
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions:
+  - comment: null
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - email
+      - iban
+      - phone_number
+      - user_id
+      set: {}
+    role: user
+  is_enum: false
+  object_relationships: []
+  select_permissions:
+  - comment: null
+    permission:
+      allow_aggregations: false
+      columns:
+      - email
+      - iban
+      - phone_number
+      - user_id
+      - created_at
+      - updated_at
+      - id
+      computed_fields: []
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+    role: user
+  table: profiles
+  update_permissions: []
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships:
+  - comment: null
+    name: budget_category
+    using:
+      foreign_key_constraint_on: budget_category_id
+  - comment: null
+    name: receipt
+    using:
+      foreign_key_constraint_on: receipt_id
+  select_permissions: []
+  table: receipt_budget_category_allocations
+  update_permissions: []
+- array_relationships:
+  - comment: null
+    name: allocations
+    using:
+      manual_configuration:
+        column_mapping:
+          id: receipt_id
+        remote_table: receipt_budget_category_allocations
+  - comment: null
+    name: receipt_budget_category_allocations
+    using:
+      foreign_key_constraint_on:
+        column: receipt_id
+        table: receipt_budget_category_allocations
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions:
+  - comment: null
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - amount_cents
+      - contains_personal_info
+      - date
+      - file_url
+      - notes
+      - number
+      - payment_iban
+      - user_id
+      set: {}
+    role: user
+  is_enum: false
+  object_relationships:
+  - comment: null
+    name: tax_category
+    using:
+      foreign_key_constraint_on: tax_category_id
+  select_permissions:
+  - comment: null
+    permission:
+      allow_aggregations: false
+      columns: []
+      computed_fields: []
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+    role: user
+  table: receipts
+  update_permissions: []
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships: []
+  select_permissions: []
+  table: tax_categories
+  update_permissions: []
+version: 2
