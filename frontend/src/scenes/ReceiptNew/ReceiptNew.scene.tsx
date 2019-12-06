@@ -3,7 +3,11 @@ import gql from "graphql-tag";
 import { buildASTSchema } from "graphql";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
-import { AutoForm } from "uniforms-material";
+import { AutoForm, AutoField, NumField } from "uniforms-material";
+
+import Button from "@material-ui/core/Button";
+
+import ErrorsField from "../../components/ErrorsField.component";
 
 // This tracks what is entered in the form
 type ReceiptModel = {
@@ -35,6 +39,9 @@ const formSchemaValidator = (model: ReceiptModel) => {
 const formSchemaExtras = {
   date: {
     type: "Date"
+  },
+  amount: {
+    label: "Amount of this receipt in EUR"
   }
 };
 
@@ -112,7 +119,15 @@ const ReceiptNew = () => {
             }
           });
         }}
-      />
+      >
+        <AutoField name="file_url" />
+        <NumField decimal name="amount" />
+        <AutoField name="date" />
+        <ErrorsField />
+        <Button type="submit" variant="contained">
+          Submit
+        </Button>
+      </AutoForm>
     </div>
   );
 };
