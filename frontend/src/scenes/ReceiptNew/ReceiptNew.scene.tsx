@@ -15,6 +15,9 @@ type ReceiptModel = {
   amount: string;
   date: string;
   includes_personal_info: boolean;
+  pay_to_name: string;
+  pay_to_iban: string;
+  pay_to_notes: string;
 };
 
 const formSchema = gql`
@@ -23,6 +26,9 @@ const formSchema = gql`
     amount: String
     date: String
     includes_personal_info: Boolean
+    pay_to_name: String
+    pay_to_iban: String
+    pay_to_notes: String
   }
 `;
 const formSchemaType = buildASTSchema(formSchema).getType("Receipt");
@@ -30,6 +36,25 @@ const formSchemaValidator = (model: ReceiptModel) => {
   const details = [];
   if (!model.file_url) {
     details.push({ name: "file_url", message: "A file is required" });
+  }
+  if (!model.amount) {
+    details.push({
+      name: "amount",
+      message: "Please specify the amount of this receipt"
+    });
+  }
+  if (!model.date) {
+    details.push({
+      name: "date",
+      message: "Please enter the date on the receipt"
+    });
+  }
+  if (!model.pay_to_iban && !model.pay_to_notes) {
+    details.push({
+      name: "pay_to_iban",
+      message:
+        "Please enter the IBAN of where we should pay, or specify a note instead."
+    });
   }
   if (details.length) {
     // eslint-disable-next-line no-throw-literal
@@ -103,26 +128,49 @@ const ReceiptNew = () => {
       </ul>
       <AutoForm
         schema={bridge}
-        onSubmit={(model: ReceiptModel) => {
-          const { file_url, amount, date, includes_personal_info } = model;
+        onSubmit={async (model: ReceiptModel) => {
+          const { amount, includes_personal_info, ...object } = model;
           const amount_cents = Math.round(parseFloat(amount) * 100);
 
-          insertReceipt({
-            variables: {
-              object: {
-                user_id: localStorage.getItem("_userId"),
-                file_url,
-                amount_cents,
-                date,
-                includes_personal_info: !!includes_personal_info
+          // const allocations: any[] = [];
+
+          try {
+            await insertReceipt({
+              variables: {
+                object: {
+                  ...object,
+                  user_id: localStorage.getItem("_userId"),
+                  amount_cents,
+                  includes_personal_info: !!includes_personal_info
+                  // budget_allocations: {
+                  //   data: allocations
+                  // }
+                }
               }
-            }
-          });
+            });
+          } catch (error) {
+            alert(`Submission failed #vuaiAI. ${error.message}`);
+          }
+
+          alert("Submission success");
         }}
       >
         <AutoField name="file_url" />
         <NumField decimal name="amount" />
         <AutoField name="date" />
+        <h3>Payment</h3>
+        <p>Input the details of how this invoice should be paid.</p>
+        <AutoField name="pay_to_name" />
+        <AutoField name="pay_to_iban" />
+        <AutoField name="pay_to_notes" />
+        <h3>Personal information</h3>
+        <p>
+          If this receipt does not contain the name and address of any
+          individual person, then please uncheck the box below. If you do, the
+          full contents of the receipt will be <strong>publicly visible</strong>
+          .
+        </p>
+        <AutoField name="includes_personal_info" value={true} />
         <ErrorsField />
         <Button type="submit" variant="contained">
           Submit
