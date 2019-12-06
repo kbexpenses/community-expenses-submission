@@ -1,8 +1,10 @@
 import React from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import Button from "@material-ui/core/Button";
 
 import { getUserId } from "../../services/auth/auth.service";
+import { Link } from "react-router-dom";
 
 type ReceiptReturn = {
   id: string;
@@ -63,6 +65,10 @@ const ReceiptIndex = () => {
           );
         })}
       </ul>
+      <h2>New Receipt</h2>
+      <Link to="/receipts/new">
+        <Button variant="contained">Submit new receipt</Button>
+      </Link>
     </div>
   );
 };
