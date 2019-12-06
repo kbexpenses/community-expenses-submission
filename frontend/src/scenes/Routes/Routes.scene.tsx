@@ -49,9 +49,9 @@ const Routes = () => {
         <Container>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/receipts/new" component={ReceiptNew} />
-            <Route path="/receipts" component={ReceiptIndex} />
+            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/receipts" component={ReceiptIndex} />
+            <Route exact path="/receipts/new" component={ReceiptNew} />
           </Switch>
         </Container>
       </Router>
