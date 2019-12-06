@@ -24,6 +24,7 @@ const lock = new Auth0Lock(
 );
 lock.on("authenticated", (authResult: AuthResult) => {
   localStorage.setItem("_authToken", authResult.idToken);
+  localStorage.setItem("_userId", authResult.idTokenPayload.sub);
 });
 
 const Home = () => {
