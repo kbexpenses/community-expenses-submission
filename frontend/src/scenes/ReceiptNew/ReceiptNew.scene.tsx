@@ -28,7 +28,8 @@ const formSchemaValidator = (model: ReceiptModel) => {
     details.push({ name: "file_url", message: "A file is required" });
   }
   if (details.length) {
-    throw details;
+    // eslint-disable-next-line no-throw-literal
+    throw { details };
   }
 };
 const formSchemaExtras = {

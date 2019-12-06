@@ -26,7 +26,8 @@ const formSchemaValidator = (model: ProfileModel) => {
     details.push({ name: "iban", message: "IBAN is required" });
   }
   if (details.length) {
-    throw details;
+    // eslint-disable-next-line no-throw-literal
+    throw { details };
   }
 };
 
