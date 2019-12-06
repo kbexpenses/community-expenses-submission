@@ -14,6 +14,7 @@ import { responsiveFontSizes } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
 import Profile from "../Profile/Profile.scene";
+import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
 
 const baseTheme = createMuiTheme();
 const theme = responsiveFontSizes(baseTheme);
@@ -57,6 +58,7 @@ const Routes = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/profile" component={Profile} />
+            <Route path="/receipt/new" component={ReceiptNew} />
           </Switch>
         </Container>
       </Router>
