@@ -31,8 +31,17 @@ const formSchemaValidator = (model: ReceiptModel) => {
     throw details;
   }
 };
+const formSchemaExtras = {
+  date: {
+    type: "Date"
+  }
+};
 
-const bridge = new GraphQLBridge(formSchemaType, formSchemaValidator);
+const bridge = new GraphQLBridge(
+  formSchemaType,
+  formSchemaValidator,
+  formSchemaExtras
+);
 
 const NewReceiptQuery = gql`
   query NewReceiptQuery {
