@@ -5011,7 +5011,7 @@ graphql-tag@^2.4.2:
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.10.1.tgz#10aa41f1cd8fae5373eaf11f1f67260a3cad5e02"
   integrity sha512-jApXqWBzNXQ8jYa/HLkZJaVw9jgwNqZkywa2zfFn16Iv1Zb7ELNHkJaXHR7Quvd5SIGsy6Ny7SUKATgnu05uEg==
 
-graphql@^14.5.8:
+"graphql@^14.0.0 || 0.8.0 - 14.0.0", graphql@^14.5.8:
   version "14.5.8"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.8.tgz#504f3d3114cb9a0a3f359bbbcf38d9e5bf6a6b3c"
   integrity sha512-MMwmi0zlVLQKLdGiMfWkgQD7dY/TUKt4L+zgJ/aR0Howebod3aNgP5JkgvAULiR2HPVZaP2VEElqtdidHweLkg==
@@ -5545,7 +5545,7 @@ internal-ip@^4.3.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
-invariant@^2.2.2, invariant@^2.2.4:
+invariant@^2.0.0, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -6790,7 +6790,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-"lodash@>=3.5 <5", lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5:
+"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -8795,7 +8795,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.3"
 
-prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10736,6 +10736,38 @@ unicode-property-aliases-ecmascript@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-1.0.5.tgz#a9cc6cc7ce63a0a3023fc99e341b94431d405a57"
   integrity sha512-L5RAqCfXqAwR3RriF8pM0lU0w4Ryf/GgzONwi6KnL1taJQa7x1TCxdJnILX59WIGOwR57IVxn7Nej0fz1Ny6fw==
+
+uniforms-bridge-graphql@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/uniforms-bridge-graphql/-/uniforms-bridge-graphql-2.6.2.tgz#cacc3c1fb1fbae1f02a0de583283c3b64eafb6e3"
+  integrity sha512-WI2Oldsod7cGl4JU6vrCuvkCKmgo9zAQnLB/ooVe62bRTTBa/hRyRB9vrUfp26Fgj2otHqKDGjNB8IGyqHDbfQ==
+  dependencies:
+    graphql "^14.0.0 || 0.8.0 - 14.0.0"
+    invariant "^2.0.0"
+    lodash "^4.0.0"
+    tslib "^1.10.0"
+    uniforms "^2.6.2"
+
+uniforms-material@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/uniforms-material/-/uniforms-material-2.6.2.tgz#5ba6cf40d150ef73a216e268e1d2c367fd51e1ff"
+  integrity sha512-EXoRUW47dpT3F0a5U+htQffkM5+HY8aKbuPb8nz3A8p9nWiLclXKZxUFaj97FgnEi4KEJmLE1v399QQbAqBjYA==
+  dependencies:
+    invariant "^2.0.0"
+    lodash "^4.0.0"
+    prop-types "^15.5.7"
+    tslib "^1.10.0"
+    uniforms "^2.6.2"
+
+uniforms@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/uniforms/-/uniforms-2.6.2.tgz#52935b6c8d2a29a6360d2303e4a53264a983c131"
+  integrity sha512-fJ9eyrjvG9aVUJ5bw1DEV+ZWn1osVs8MhaPCdqCkSyKV6AMS0MZgwiN1m1oTBbYEkgLgVylwv7s13lyLWKu4dg==
+  dependencies:
+    invariant "^2.0.0"
+    lodash "^4.0.0"
+    prop-types "^15.5.7"
+    tslib "^1.10.0"
 
 union-value@^1.0.0:
   version "1.0.1"
