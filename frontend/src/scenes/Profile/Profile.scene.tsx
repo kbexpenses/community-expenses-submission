@@ -8,6 +8,7 @@ import { AutoForm } from "uniforms-material";
 import { getUserId } from "../../services/auth/auth.service";
 
 type ProfileModel = {
+  name: string;
   iban: string;
   email: string;
   phone_number: string;
@@ -15,6 +16,7 @@ type ProfileModel = {
 
 const formSchema = gql`
   type Profile {
+    name: String
     iban: String
     email: String
     phone_number: String
@@ -39,6 +41,7 @@ const ProfileQuery = gql`
   query Profile {
     user_profiles {
       id
+      name
       iban
       email
       phone_number
@@ -47,28 +50,19 @@ const ProfileQuery = gql`
 `;
 
 const SetProfileMutation = gql`
-  mutation SetProfile(
-    $user_id: String!
-    $email: String!
-    $phone_number: String!
-    $iban: String!
-  ) {
+  mutation SetProfile($object: user_profiles_insert_input!) {
     insert_user_profiles(
-      objects: {
-        email: $email
-        phone_number: $phone_number
-        iban: $iban
-        user_id: $user_id
-      }
+      objects: [$object]
       on_conflict: {
         constraint: user_profiles_user_id_key
-        update_columns: [email, phone_number, iban]
+        update_columns: [name, email, phone_number, iban]
       }
     ) {
       affected_rows
       returning {
         id
         user_id
+        name
         email
         phone_number
         iban
@@ -104,16 +98,23 @@ const Profile = () => {
       <AutoForm
         schema={bridge}
         model={profile}
-        onSubmit={(model: ProfileModel) => {
-          const { iban, phone_number, email } = model;
-          setProfile({
-            variables: {
-              user_id: getUserId(),
-              iban,
-              phone_number,
-              email
-            }
-          });
+        onSubmit={async (
+          model: ProfileModel & { __typename: string; id: string }
+        ) => {
+          const { __typename, id, ...object } = model;
+          try {
+            await setProfile({
+              variables: {
+                object: {
+                  ...object,
+                  user_id: getUserId()
+                }
+              }
+            });
+            alert("Profile successfully updated.");
+          } catch (error) {
+            alert(`Error #NL7KW3: ${error.message}`);
+          }
         }}
       />
     </div>
