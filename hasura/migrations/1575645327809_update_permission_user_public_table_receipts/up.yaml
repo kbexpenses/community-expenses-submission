@@ -1,0 +1,30 @@
+- args:
+    role: user
+    table:
+      name: receipts
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - amount_cents
+      - date
+      - file_url
+      - includes_personal_info
+      - number
+      - pay_to_iban
+      - pay_to_name
+      - pay_to_notes
+      - user_id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: receipts
+      schema: public
+  type: create_insert_permission

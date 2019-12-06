@@ -1,0 +1,17 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - budget_cents
+      - created_at
+      - id
+      - name
+      - notes
+      - updated_at
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: budget_categories
+      schema: public
+  type: create_select_permission

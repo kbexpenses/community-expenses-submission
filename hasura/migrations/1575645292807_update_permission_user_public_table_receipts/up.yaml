@@ -1,0 +1,29 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - has_been_paid
+      - includes_personal_info
+      - is_legally_compliant
+      - paper_copy_received
+      - date
+      - amount_cents
+      - number
+      - file_url
+      - pay_to_iban
+      - pay_to_name
+      - pay_to_notes
+      - user_id
+      - created_at
+      - updated_at
+      - id
+      - tax_category_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: null
+    role: user
+    table:
+      name: receipts
+      schema: public
+  type: create_select_permission
