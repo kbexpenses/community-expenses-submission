@@ -5,6 +5,8 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
 import { AutoForm } from "uniforms-material";
 
+import { getUserId } from "../../services/auth/auth.service";
+
 type ProfileModel = {
   iban: string;
   email: string;
@@ -106,7 +108,7 @@ const Profile = () => {
           const { iban, phone_number, email } = model;
           setProfile({
             variables: {
-              user_id: localStorage.getItem("_userId"),
+              user_id: getUserId(),
               iban,
               phone_number,
               email

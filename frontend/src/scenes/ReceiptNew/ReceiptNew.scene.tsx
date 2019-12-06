@@ -4,9 +4,9 @@ import { buildASTSchema } from "graphql";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
 import { AutoForm, AutoField, NumField } from "uniforms-material";
-
 import Button from "@material-ui/core/Button";
 
+import { getUserId } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
 
 // This tracks what is entered in the form
@@ -140,7 +140,7 @@ const ReceiptNew = () => {
               variables: {
                 object: {
                   ...object,
-                  user_id: localStorage.getItem("_userId"),
+                  user_id: getUserId(),
                   amount_cents,
                   includes_personal_info: !!includes_personal_info
                   // budget_allocations: {

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Auth0Lock from "auth0-lock";
 import {
   createStyles,
   withStyles,
@@ -21,15 +20,6 @@ import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
 const baseTheme = createMuiTheme();
 const theme = responsiveFontSizes(baseTheme);
 
-const lock = new Auth0Lock(
-  "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
-  "community-expenses-dev.eu.auth0.com"
-);
-lock.on("authenticated", (authResult: AuthResult) => {
-  localStorage.setItem("_authToken", authResult.idToken);
-  localStorage.setItem("_userId", authResult.idTokenPayload.sub);
-});
-
 const Home = () => {
   return (
     <div className="App">
@@ -41,7 +31,6 @@ const Home = () => {
           className="App-link"
           onClick={event => {
             event.preventDefault();
-            lock.show();
           }}
         >
           Learn React

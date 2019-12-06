@@ -2,6 +2,8 @@ import React from "react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
+import { getUserId } from "../../services/auth/auth.service";
+
 type ReceiptReturn = {
   id: string;
   number: number;
@@ -25,7 +27,7 @@ const ReceiptIndexQuery = gql`
 const ReceiptIndex = () => {
   const { loading, error, data } = useQuery(ReceiptIndexQuery, {
     variables: {
-      user_id: localStorage.getItem("_userId")
+      user_id: getUserId()
     }
   });
 

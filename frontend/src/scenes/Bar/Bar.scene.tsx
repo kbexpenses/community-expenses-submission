@@ -6,6 +6,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+import { showLock } from "../../services/auth/auth.service";
+
 const Bar: React.FC<Props> = (props: Props) => {
   const { classes } = props;
 
@@ -13,18 +15,22 @@ const Bar: React.FC<Props> = (props: Props) => {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
-          <Typography
-            variant="h6"
-            component="h1"
-            color="inherit"
-            className={classes.title}
-          >
-            Community Expenses
-          </Typography>
+          <Link to="/" className={classes.title}>
+            <Typography variant="h6" component="h1" color="inherit">
+              Community Expenses
+            </Typography>
+          </Link>
           <Link to="/receipts">
             <Button color="inherit">Receipts</Button>
           </Link>
-          <Button color="inherit">Login</Button>
+          <Button
+            color="inherit"
+            onClick={() => {
+              showLock();
+            }}
+          >
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
