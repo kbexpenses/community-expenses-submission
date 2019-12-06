@@ -50,8 +50,8 @@ const Routes = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/profile" component={Profile} />
-            <Route path="/receipts" component={ReceiptIndex} />
             <Route path="/receipts/new" component={ReceiptNew} />
+            <Route path="/receipts" component={ReceiptIndex} />
           </Switch>
         </Container>
       </Router>
