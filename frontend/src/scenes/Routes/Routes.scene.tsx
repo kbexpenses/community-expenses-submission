@@ -16,6 +16,7 @@ import Bar from "../Bar/Bar.scene";
 import Profile from "../Profile/Profile.scene";
 import ReceiptIndex from "../ReceiptIndex/ReceiptIndex.scene";
 import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
+import ReceiptAdmin from "../ReceiptsAdmin/ReceiptsAdmin.scene";
 
 const baseTheme = createMuiTheme();
 const theme = responsiveFontSizes(baseTheme);
@@ -52,6 +53,7 @@ const Routes = () => {
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/receipts" component={ReceiptIndex} />
             <Route exact path="/receipts/new" component={ReceiptNew} />
+            <Route exact path="/receipts/admin" component={ReceiptAdmin} />
           </Switch>
         </Container>
       </Router>
