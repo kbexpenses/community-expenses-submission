@@ -23,6 +23,9 @@ const Bar: React.FC<Props> = (props: Props) => {
           <Link to="/receipts">
             <Button color="inherit">Receipts</Button>
           </Link>
+          <Link to="/profile">
+            <Button color="inherit">Profile</Button>
+          </Link>
           <Button
             color="inherit"
             onClick={() => {
