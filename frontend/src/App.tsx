@@ -1,12 +1,21 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { ApolloProvider } from "react-apollo";
+import Auth0Lock from "auth0-lock";
 
 import apollo from "./apollo";
 import store from "./store";
 
 import logo from "./logo.svg";
 import "./App.css";
+
+const lock = new Auth0Lock(
+  "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
+  "community-expenses-dev.eu.auth0.com"
+);
+lock.on("authenticated", (authResult: AuthResult) => {
+  localStorage.setItem("_authToken", authResult.idToken);
+});
 
 const App: React.FC = () => {
   return (
@@ -18,14 +27,15 @@ const App: React.FC = () => {
             <p>
               Edit <code>src/App.tsx</code> and save to reload.
             </p>
-            <a
+            <button
               className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={event => {
+                event.preventDefault();
+                lock.show();
+              }}
             >
               Learn React
-            </a>
+            </button>
           </header>
         </div>
       </ApolloProvider>
