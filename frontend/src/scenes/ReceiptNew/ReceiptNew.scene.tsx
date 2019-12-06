@@ -77,10 +77,14 @@ const bridge = new GraphQLBridge(
 );
 
 const NewReceiptQuery = gql`
-  query NewReceiptQuery {
+  query NewReceiptQuery($user_id: String!) {
     budget_categories {
       id
       name
+    }
+    user_profiles(where: { user_id: { _eq: $user_id } }) {
+      name
+      iban
     }
   }
 `;
@@ -98,7 +102,11 @@ const NewReceiptMutation = gql`
 `;
 
 const ReceiptNew = () => {
-  const { loading, error, data } = useQuery(NewReceiptQuery);
+  const { loading, error, data } = useQuery(NewReceiptQuery, {
+    variables: {
+      user_id: getUserId()
+    }
+  });
   const [insertReceipt] = useMutation(NewReceiptMutation);
 
   if (loading) {
@@ -117,6 +125,7 @@ const ReceiptNew = () => {
   }
 
   const { budget_categories } = data;
+  const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
 
   return (
     <div>
@@ -128,7 +137,7 @@ const ReceiptNew = () => {
       </ul>
       <AutoForm
         schema={bridge}
-        model={{ includes_personal_info: true }}
+        model={{ includes_personal_info: true, pay_to_iban, pay_to_name }}
         onSubmit={async (model: ReceiptModel) => {
           const { amount, includes_personal_info, ...object } = model;
           const amount_cents = Math.round(parseFloat(amount) * 100);
