@@ -128,6 +128,7 @@ const ReceiptNew = () => {
       </ul>
       <AutoForm
         schema={bridge}
+        model={{ includes_personal_info: true }}
         onSubmit={async (model: ReceiptModel) => {
           const { amount, includes_personal_info, ...object } = model;
           const amount_cents = Math.round(parseFloat(amount) * 100);
@@ -170,7 +171,7 @@ const ReceiptNew = () => {
           full contents of the receipt will be <strong>publicly visible</strong>
           .
         </p>
-        <AutoField name="includes_personal_info" value={true} />
+        <AutoField name="includes_personal_info" />
         <ErrorsField />
         <Button type="submit" variant="contained">
           Submit
