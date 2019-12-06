@@ -1,14 +1,14 @@
 import React from "react";
 import gql from "graphql-tag";
 import { buildASTSchema } from "graphql";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
 import { AutoForm } from "uniforms-material";
 
 type ProfileModel = {
   iban: string;
   email: string;
-  phoneNumber: string;
+  phone_number: string;
 };
 
 const formSchema = gql`
@@ -43,8 +43,41 @@ const ProfileQuery = gql`
   }
 `;
 
+const SetProfileMutation = gql`
+  mutation SetProfile(
+    $user_id: String!
+    $email: String!
+    $phone_number: String!
+    $iban: String!
+  ) {
+    insert_user_profiles(
+      objects: {
+        email: $email
+        phone_number: $phone_number
+        iban: $iban
+        user_id: $user_id
+      }
+      on_conflict: {
+        constraint: user_profiles_user_id_key
+        update_columns: [email, phone_number, iban]
+      }
+    ) {
+      affected_rows
+      returning {
+        id
+        user_id
+        email
+        phone_number
+        iban
+      }
+    }
+  }
+`;
+
 const Profile = () => {
   const { loading, error, data } = useQuery(ProfileQuery);
+  const [setProfile] = useMutation(SetProfileMutation);
+
   if (loading) {
     return (
       <div>
@@ -68,8 +101,16 @@ const Profile = () => {
       <AutoForm
         schema={bridge}
         model={profile}
-        onSubmit={(data: ProfileModel) => {
-          debugger;
+        onSubmit={(model: ProfileModel) => {
+          const { iban, phone_number, email } = model;
+          setProfile({
+            variables: {
+              user_id: localStorage.getItem("_userId"),
+              iban,
+              phone_number,
+              email
+            }
+          });
         }}
       />
     </div>
