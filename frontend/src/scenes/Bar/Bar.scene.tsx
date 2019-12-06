@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { createStyles, withStyles, WithStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -20,7 +21,9 @@ const Bar: React.FC<Props> = (props: Props) => {
           >
             Community Expenses
           </Typography>
-          <Button color="inherit">Receipts</Button>
+          <Link to="/receipts">
+            <Button color="inherit">Receipts</Button>
+          </Link>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>

@@ -15,6 +15,7 @@ import { ThemeProvider } from "@material-ui/styles";
 
 import Bar from "../Bar/Bar.scene";
 import Profile from "../Profile/Profile.scene";
+import ReceiptIndex from "../ReceiptIndex/ReceiptIndex.scene";
 import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
 
 const baseTheme = createMuiTheme();
@@ -53,14 +54,15 @@ const Home = () => {
 const Routes = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Bar />
       <Router>
+        <Bar />
         <CssBaseline />
         <Container>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/profile" component={Profile} />
-            <Route path="/receipt/new" component={ReceiptNew} />
+            <Route path="/receipts" component={ReceiptIndex} />
+            <Route path="/receipts/new" component={ReceiptNew} />
           </Switch>
         </Container>
       </Router>
