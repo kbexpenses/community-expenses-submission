@@ -13,6 +13,7 @@ import Container from "@material-ui/core/Container";
 import { responsiveFontSizes } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
+import Bar from "../Bar/Bar.scene";
 import Profile from "../Profile/Profile.scene";
 import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
 
@@ -52,6 +53,7 @@ const Home = () => {
 const Routes = () => {
   return (
     <ThemeProvider theme={theme}>
+      <Bar />
       <Router>
         <CssBaseline />
         <Container>
