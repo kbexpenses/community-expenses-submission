@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import { Theme, createStyles } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/styles";
@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 
-import { getUserId, userHasRole } from "../../services/auth/auth.service";
+import { userHasRole } from "../../services/auth/auth.service";
 
 type ReceiptReturn = {
   id: string;
