@@ -5,14 +5,14 @@ import { Redirect } from "react-router-dom";
 
 import { Theme, createStyles } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/styles";
-import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 
 import { userHasRole } from "../../services/auth/auth.service";
+import ReceiptItem from "./components/ReceiptItem.component";
 
-type ReceiptReturn = {
+export type ReceiptReturn = {
   id: string;
   user_id: string;
   number: number;
@@ -109,47 +109,9 @@ const ReceiptAdmin = (props: Props) => {
           />
         </p>
       </Paper>
-      {receipts.map((receipt: ReceiptReturn) => {
-        return (
-          <Paper key={receipt.id} className={classes.padder}>
-            <div>Number: {receipt.number}</div>
-            <div>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</div>
-            <div>Pay to name: {receipt.pay_to_name}</div>
-            <div>Pay to IBAN: {receipt.pay_to_iban}</div>
-            <div>Pay to notes: {receipt.pay_to_notes}</div>
-            <div>
-              Paper received: {receipt.paper_copy_received ? "Yes" : "No"}
-            </div>
-            <div>
-              Payment status: {receipt.has_been_paid ? "Sent" : "Pending"}
-            </div>
-            <div>
-              <Button
-                size="small"
-                variant="contained"
-                className={classes.markLegallyValid}
-              >
-                Mark legally VALID
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                className={classes.markLegallyInvalid}
-              >
-                Mark legally INVALID
-              </Button>
-            </div>
-            <div>
-              <Button size="small" variant="contained" color="primary">
-                Mark Paper Received
-              </Button>
-              <Button size="small" variant="contained" color="secondary">
-                Mark Payment Sent
-              </Button>
-            </div>
-          </Paper>
-        );
-      })}
+      {receipts.map((receipt: ReceiptReturn) => (
+        <ReceiptItem key={receipt.id} receipt={receipt} classes={classes} />
+      ))}
     </div>
   );
 };
