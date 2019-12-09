@@ -53,6 +53,14 @@ const ReceiptSingle = (props: Props) => {
 
   const receipt: ReceiptReturn = data.receipts_by_pk;
 
+  if (!receipt) {
+    return (
+      <div>
+        <p>Not found. #9MskPK</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1>Receipt Single</h1>
