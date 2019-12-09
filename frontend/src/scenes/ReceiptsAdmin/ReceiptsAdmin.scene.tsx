@@ -74,6 +74,38 @@ const applySearchToReceipts = (search: string, receipts: ReceiptReturn[]) => {
   });
 };
 
+const applyFilterToReceipts = (filter: string, receipts: ReceiptReturn[]) => {
+  if (filter === "") {
+    return receipts;
+  }
+
+  return receipts.filter(receipt => {
+    if (filter === IS_LEGALLY_COMPLIANT) {
+      if (
+        receipt.is_legally_compliant !== false &&
+        receipt.is_legally_compliant !== true
+      ) {
+        return true;
+      }
+      return false;
+    }
+
+    if (filter === PAPER_COPY_RECEIVED) {
+      if (receipt.paper_copy_received !== true) {
+        return true;
+      }
+      return false;
+    }
+
+    if (filter === HAS_BEEN_PAID) {
+      if (receipt.has_been_paid !== true) {
+        return true;
+      }
+      return false;
+    }
+  });
+};
+
 const ReceiptAdmin = (props: Props) => {
   const { classes } = props;
 
@@ -100,7 +132,8 @@ const ReceiptAdmin = (props: Props) => {
     );
   }
 
-  const receipts = applySearchToReceipts(search, data.receipts);
+  const filteredReceipts = applyFilterToReceipts(filter, data.receipts);
+  const receipts = applySearchToReceipts(search, filteredReceipts);
 
   return (
     <div>
