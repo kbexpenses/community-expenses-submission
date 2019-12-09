@@ -57,10 +57,12 @@ const ReceiptIndex = () => {
         {receipts.map((receipt: ReceiptReturn) => {
           return (
             <li key={receipt.id}>
-              Number: {receipt.number}; Amount: €
-              {(receipt.amount_cents / 100).toFixed(2)}; Paper received:{" "}
-              {receipt.paper_copy_received ? "Yes" : "No"}; Payment status:{" "}
-              {receipt.has_been_paid ? "Sent" : "Pending"}
+              <Link to={`/receipts/${receipt.id}`}>
+                Number: {receipt.number};
+              </Link>{" "}
+              Amount: €{(receipt.amount_cents / 100).toFixed(2)}; Paper
+              received: {receipt.paper_copy_received ? "Yes" : "No"}; Payment
+              status: {receipt.has_been_paid ? "Sent" : "Pending"}
             </li>
           );
         })}
