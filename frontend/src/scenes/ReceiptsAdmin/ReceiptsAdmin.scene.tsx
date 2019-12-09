@@ -3,20 +3,26 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Redirect } from "react-router-dom";
 
-import { Theme, createStyles } from "@material-ui/core";
+import { Theme, createStyles, Button } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/styles";
 import Paper from "@material-ui/core/Paper";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
+import grey from "@material-ui/core/colors/grey";
 
 import { userHasRole } from "../../services/auth/auth.service";
 import ReceiptItem from "./components/ReceiptItem.component";
+
+const IS_LEGALLY_COMPLIANT = "is_legally_compliant";
+const PAPER_COPY_RECEIVED = "paper_copy_received";
+const HAS_BEEN_PAID = "has_been_paid";
 
 export type ReceiptReturn = {
   id: string;
   user_id: string;
   number: number;
   amount_cents: number;
+  is_legally_compliant?: boolean;
   paper_copy_received?: boolean;
   has_been_paid?: boolean;
   pay_to_name?: string;
@@ -30,6 +36,7 @@ const ReceiptAdminQuery = gql`
       id
       number
       amount_cents
+      is_legally_compliant
       paper_copy_received
       has_been_paid
       pay_to_name
@@ -70,6 +77,7 @@ const applySearchToReceipts = (search: string, receipts: ReceiptReturn[]) => {
 const ReceiptAdmin = (props: Props) => {
   const { classes } = props;
 
+  const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(ReceiptAdminQuery);
 
@@ -98,7 +106,44 @@ const ReceiptAdmin = (props: Props) => {
     <div>
       <h2>Receipts</h2>
       <Paper className={classes.padder}>
-        <h3>Search</h3>
+        <h3>Filter</h3>
+        <p>
+          <Button
+            className={
+              filter === IS_LEGALLY_COMPLIANT ? classes.green : classes.grey
+            }
+            variant="contained"
+            onClick={() => {
+              setFilter(
+                filter === IS_LEGALLY_COMPLIANT ? "" : IS_LEGALLY_COMPLIANT
+              );
+            }}
+          >
+            Waiting for legal validation
+          </Button>{" "}
+          <Button
+            className={
+              filter === PAPER_COPY_RECEIVED ? classes.green : classes.grey
+            }
+            variant="contained"
+            onClick={() => {
+              setFilter(
+                filter === PAPER_COPY_RECEIVED ? "" : PAPER_COPY_RECEIVED
+              );
+            }}
+          >
+            Waiting for legal validation
+          </Button>{" "}
+          <Button
+            className={filter === HAS_BEEN_PAID ? classes.green : classes.grey}
+            variant="contained"
+            onClick={() => {
+              setFilter(filter === HAS_BEEN_PAID ? "" : HAS_BEEN_PAID);
+            }}
+          >
+            Waiting for payment
+          </Button>
+        </p>
         <p>
           Search:{" "}
           <input
@@ -126,6 +171,18 @@ const styles = (theme: Theme) =>
       backgroundColor: green[500],
       "&:hover": {
         backgroundColor: green[500]
+      }
+    },
+    green: {
+      backgroundColor: green[500],
+      "&:hover": {
+        backgroundColor: green[500]
+      }
+    },
+    grey: {
+      backgroundColor: grey[200],
+      "&:hover": {
+        backgroundColor: grey[200]
       }
     },
     markLegallyInvalid: {

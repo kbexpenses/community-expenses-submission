@@ -4,6 +4,16 @@ import { ReceiptReturn } from "../ReceiptsAdmin.scene";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
+const isLegallyCompliantText = (is_legally_compliant?: boolean) => {
+  if (is_legally_compliant === false) {
+    return "No";
+  } else if (is_legally_compliant === true) {
+    return "Yes";
+  } else {
+    return "Unknown";
+  }
+};
+
 const ReceiptItem = (props: {
   classes: { [name: string]: string };
   receipt: ReceiptReturn;
@@ -17,6 +27,10 @@ const ReceiptItem = (props: {
       <div>Pay to name: {receipt.pay_to_name}</div>
       <div>Pay to IBAN: {receipt.pay_to_iban}</div>
       <div>Pay to notes: {receipt.pay_to_notes}</div>
+      <div>
+        Legally compliant:{" "}
+        {isLegallyCompliantText(receipt.is_legally_compliant)}
+      </div>
       <div>Paper received: {receipt.paper_copy_received ? "Yes" : "No"}</div>
       <div>Payment status: {receipt.has_been_paid ? "Sent" : "Pending"}</div>
       <div>
