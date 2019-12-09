@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ReceiptReturn } from "../ReceiptsAdmin.scene";
 
 import Paper from "@material-ui/core/Paper";
@@ -14,10 +14,13 @@ const isLegallyCompliantText = (is_legally_compliant?: boolean) => {
   }
 };
 
-const ReceiptItem = (props: {
+type Props = {
   classes: { [name: string]: string };
   receipt: ReceiptReturn;
-}) => {
+  setIsLegallyCompliant: (isLegallyCompliant: boolean) => void;
+};
+
+const ReceiptItem = (props: Props) => {
   const { receipt, classes } = props;
 
   return (
@@ -38,6 +41,11 @@ const ReceiptItem = (props: {
           size="small"
           variant="contained"
           className={classes.markLegallyValid}
+          onClick={() => {
+            if (window.confirm("Are you sure?")) {
+              props.setIsLegallyCompliant(true);
+            }
+          }}
         >
           Mark legally VALID
         </Button>
@@ -45,6 +53,11 @@ const ReceiptItem = (props: {
           size="small"
           variant="contained"
           className={classes.markLegallyInvalid}
+          onClick={() => {
+            if (window.confirm("Are you sure?")) {
+              props.setIsLegallyCompliant(false);
+            }
+          }}
         >
           Mark legally INVALID
         </Button>

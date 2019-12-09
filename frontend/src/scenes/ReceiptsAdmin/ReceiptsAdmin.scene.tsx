@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { Redirect } from "react-router-dom";
 
 import { Theme, createStyles, Button } from "@material-ui/core";
@@ -12,10 +12,14 @@ import grey from "@material-ui/core/colors/grey";
 
 import { userHasRole } from "../../services/auth/auth.service";
 import ReceiptItem from "./components/ReceiptItem.component";
+import {
+  applyFilterToReceipts,
+  applySearchToReceipts
+} from "./ReceiptAdmin.helpers";
 
-const IS_LEGALLY_COMPLIANT = "is_legally_compliant";
-const PAPER_COPY_RECEIVED = "paper_copy_received";
-const HAS_BEEN_PAID = "has_been_paid";
+export const IS_LEGALLY_COMPLIANT = "is_legally_compliant";
+export const PAPER_COPY_RECEIVED = "paper_copy_received";
+export const HAS_BEEN_PAID = "has_been_paid";
 
 export type ReceiptReturn = {
   id: string;
@@ -46,65 +50,20 @@ const ReceiptAdminQuery = gql`
   }
 `;
 
-const applySearchToReceipts = (search: string, receipts: ReceiptReturn[]) => {
-  const lowerCaseSearch = search.toLowerCase();
-  return receipts.filter((receipt: ReceiptReturn) => {
-    if (receipt.number.toString().indexOf(search) !== -1) {
-      return true;
-    }
-    if (
-      receipt.pay_to_iban &&
-      receipt.pay_to_iban.toLowerCase().indexOf(lowerCaseSearch) !== -1
+const SetIsLegallyCompliantMutation = gql`
+  mutation setIsLegallyCompliant($id: uuid!, $isLegallyCompliant: Boolean!) {
+    update_receipts(
+      where: { id: { _eq: $id } }
+      _set: { is_legally_compliant: $isLegallyCompliant }
     ) {
-      return true;
+      affected_rows
+      returning {
+        id
+        is_legally_compliant
+      }
     }
-    if (
-      receipt.pay_to_name &&
-      receipt.pay_to_name.toLowerCase().indexOf(lowerCaseSearch) !== -1
-    ) {
-      return true;
-    }
-    if (
-      receipt.pay_to_notes &&
-      receipt.pay_to_notes.toLowerCase().indexOf(lowerCaseSearch) !== -1
-    ) {
-      return true;
-    }
-    return false;
-  });
-};
-
-const applyFilterToReceipts = (filter: string, receipts: ReceiptReturn[]) => {
-  if (filter === "") {
-    return receipts;
   }
-
-  return receipts.filter(receipt => {
-    if (filter === IS_LEGALLY_COMPLIANT) {
-      if (
-        receipt.is_legally_compliant !== false &&
-        receipt.is_legally_compliant !== true
-      ) {
-        return true;
-      }
-      return false;
-    }
-
-    if (filter === PAPER_COPY_RECEIVED) {
-      if (receipt.paper_copy_received !== true) {
-        return true;
-      }
-      return false;
-    }
-
-    if (filter === HAS_BEEN_PAID) {
-      if (receipt.has_been_paid !== true) {
-        return true;
-      }
-      return false;
-    }
-  });
-};
+`;
 
 const ReceiptAdmin = (props: Props) => {
   const { classes } = props;
@@ -112,6 +71,11 @@ const ReceiptAdmin = (props: Props) => {
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(ReceiptAdminQuery);
+  const [_setIsLegallyCompliant] = useMutation(SetIsLegallyCompliantMutation);
+
+  const setIsLegallyCompliant = (id: string, isLegallyCompliant: boolean) => {
+    _setIsLegallyCompliant({ variables: { id, isLegallyCompliant } });
+  };
 
   if (!userHasRole("admin")) {
     return <Redirect to="/" />;
@@ -165,7 +129,7 @@ const ReceiptAdmin = (props: Props) => {
               );
             }}
           >
-            Waiting for legal validation
+            Waiting for paper copy
           </Button>{" "}
           <Button
             className={filter === HAS_BEEN_PAID ? classes.green : classes.grey}
@@ -188,7 +152,12 @@ const ReceiptAdmin = (props: Props) => {
         </p>
       </Paper>
       {receipts.map((receipt: ReceiptReturn) => (
-        <ReceiptItem key={receipt.id} receipt={receipt} classes={classes} />
+        <ReceiptItem
+          key={receipt.id}
+          receipt={receipt}
+          classes={classes}
+          setIsLegallyCompliant={setIsLegallyCompliant.bind(null, receipt.id)}
+        />
       ))}
     </div>
   );
