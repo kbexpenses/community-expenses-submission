@@ -1,0 +1,6 @@
+- args:
+    sql: "\n           alter table \"public\".\"receipts\"\n           add constraint
+      \"receipts_user_id_fkey\"\n           foreign key (\"user_id\")\n           references
+      \"public\".\"user_profiles\"\n           (\"user_id\") on update restrict on
+      delete restrict;\n      "
+  type: run_sql
