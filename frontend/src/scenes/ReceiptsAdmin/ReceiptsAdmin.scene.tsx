@@ -50,16 +50,15 @@ const ReceiptAdminQuery = gql`
   }
 `;
 
-const SetIsLegallyCompliantMutation = gql`
-  mutation setIsLegallyCompliant($id: uuid!, $isLegallyCompliant: Boolean!) {
-    update_receipts(
-      where: { id: { _eq: $id } }
-      _set: { is_legally_compliant: $isLegallyCompliant }
-    ) {
+const SetBoolValueMutation = gql`
+  mutation SetBoolValueMutation($id: uuid!, $set: receipts_set_input) {
+    update_receipts(where: { id: { _eq: $id } }, _set: $set) {
       affected_rows
       returning {
         id
         is_legally_compliant
+        paper_copy_received
+        has_been_paid
       }
     }
   }
@@ -71,10 +70,10 @@ const ReceiptAdmin = (props: Props) => {
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(ReceiptAdminQuery);
-  const [_setIsLegallyCompliant] = useMutation(SetIsLegallyCompliantMutation);
+  const [_setBoolValue] = useMutation(SetBoolValueMutation);
 
-  const setIsLegallyCompliant = (id: string, isLegallyCompliant: boolean) => {
-    _setIsLegallyCompliant({ variables: { id, isLegallyCompliant } });
+  const setBoolValue = (id: string) => (key: string) => (value: boolean) => {
+    _setBoolValue({ variables: { id, set: { [key]: value } } });
   };
 
   if (!userHasRole("admin")) {
@@ -97,7 +96,8 @@ const ReceiptAdmin = (props: Props) => {
   }
 
   const filteredReceipts = applyFilterToReceipts(filter, data.receipts);
-  const receipts = applySearchToReceipts(search, filteredReceipts);
+  const searchedReceipts = applySearchToReceipts(search, filteredReceipts);
+  const receipts = searchedReceipts.sort((r1, r2) => r1.number - r2.number);
 
   return (
     <div>
@@ -151,14 +151,19 @@ const ReceiptAdmin = (props: Props) => {
           />
         </p>
       </Paper>
-      {receipts.map((receipt: ReceiptReturn) => (
-        <ReceiptItem
-          key={receipt.id}
-          receipt={receipt}
-          classes={classes}
-          setIsLegallyCompliant={setIsLegallyCompliant.bind(null, receipt.id)}
-        />
-      ))}
+      {receipts.map((receipt: ReceiptReturn) => {
+        const setBool = setBoolValue(receipt.id);
+        return (
+          <ReceiptItem
+            key={receipt.id}
+            receipt={receipt}
+            classes={classes}
+            setIsLegallyCompliant={setBool(IS_LEGALLY_COMPLIANT)}
+            setPaperCopyReceived={() => setBool(PAPER_COPY_RECEIVED)(true)}
+            setHasBeenPaid={() => setBool(HAS_BEEN_PAID)(true)}
+          />
+        );
+      })}
     </div>
   );
 };

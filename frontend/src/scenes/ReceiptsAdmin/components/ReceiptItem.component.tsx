@@ -18,6 +18,8 @@ type Props = {
   classes: { [name: string]: string };
   receipt: ReceiptReturn;
   setIsLegallyCompliant: (isLegallyCompliant: boolean) => void;
+  setPaperCopyReceived: () => void;
+  setHasBeenPaid: () => void;
 };
 
 const ReceiptItem = (props: Props) => {
@@ -63,10 +65,28 @@ const ReceiptItem = (props: Props) => {
         </Button>
       </div>
       <div>
-        <Button size="small" variant="contained" color="primary">
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            if (window.confirm("Are you sure?")) {
+              props.setPaperCopyReceived();
+            }
+          }}
+        >
           Mark Paper Received
         </Button>
-        <Button size="small" variant="contained" color="secondary">
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            if (window.confirm("Are you sure?")) {
+              props.setHasBeenPaid();
+            }
+          }}
+        >
           Mark Payment Sent
         </Button>
       </div>
