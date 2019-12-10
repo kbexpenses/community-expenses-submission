@@ -34,61 +34,69 @@ const ReceiptItem = (props: Props) => {
       <div>Pay to notes: {receipt.pay_to_notes}</div>
       <div>
         Legally compliant:{" "}
-        {isLegallyCompliantText(receipt.is_legally_compliant)}
+        {isLegallyCompliantText(receipt.is_legally_compliant)}{" "}
+        {receipt.is_legally_compliant === null ? (
+          <>
+            <Button
+              size="small"
+              variant="contained"
+              className={classes.markLegallyValid}
+              onClick={() => {
+                if (window.confirm("Are you sure?")) {
+                  props.setIsLegallyCompliant(true);
+                }
+              }}
+            >
+              Mark legally VALID
+            </Button>{" "}
+            <Button
+              size="small"
+              variant="contained"
+              className={classes.markLegallyInvalid}
+              onClick={() => {
+                if (window.confirm("Are you sure?")) {
+                  props.setIsLegallyCompliant(false);
+                }
+              }}
+            >
+              Mark legally INVALID
+            </Button>
+          </>
+        ) : null}
       </div>
-      <div>Paper received: {receipt.paper_copy_received ? "Yes" : "No"}</div>
-      <div>Payment status: {receipt.has_been_paid ? "Sent" : "Pending"}</div>
       <div>
-        <Button
-          size="small"
-          variant="contained"
-          className={classes.markLegallyValid}
-          onClick={() => {
-            if (window.confirm("Are you sure?")) {
-              props.setIsLegallyCompliant(true);
-            }
-          }}
-        >
-          Mark legally VALID
-        </Button>
-        <Button
-          size="small"
-          variant="contained"
-          className={classes.markLegallyInvalid}
-          onClick={() => {
-            if (window.confirm("Are you sure?")) {
-              props.setIsLegallyCompliant(false);
-            }
-          }}
-        >
-          Mark legally INVALID
-        </Button>
+        Paper received: {receipt.paper_copy_received ? "Yes" : "No"}{" "}
+        {receipt.paper_copy_received ? null : (
+          <Button
+            size="small"
+            variant="contained"
+            color="inherit"
+            onClick={() => {
+              if (window.confirm("Are you sure?")) {
+                props.setPaperCopyReceived();
+              }
+            }}
+          >
+            Mark Paper Received
+          </Button>
+        )}
       </div>
       <div>
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            if (window.confirm("Are you sure?")) {
-              props.setPaperCopyReceived();
-            }
-          }}
-        >
-          Mark Paper Received
-        </Button>
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            if (window.confirm("Are you sure?")) {
-              props.setHasBeenPaid();
-            }
-          }}
-        >
-          Mark Payment Sent
-        </Button>
+        Payment status: {receipt.has_been_paid ? "Sent" : "Pending"}{" "}
+        {receipt.has_been_paid ? null : (
+          <Button
+            size="small"
+            variant="contained"
+            color="inherit"
+            onClick={() => {
+              if (window.confirm("Are you sure?")) {
+                props.setHasBeenPaid();
+              }
+            }}
+          >
+            Mark Payment Sent
+          </Button>
+        )}
       </div>
     </Paper>
   );
