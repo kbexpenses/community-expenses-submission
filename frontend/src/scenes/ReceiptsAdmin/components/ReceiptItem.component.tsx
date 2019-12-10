@@ -4,6 +4,8 @@ import { ReceiptReturn } from "../ReceiptsAdmin.scene";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
+const CONFIRM_WARNING = `\n\nThis action is irreversible. There is no option to undo.`;
+
 const isLegallyCompliantText = (is_legally_compliant?: boolean) => {
   if (is_legally_compliant === false) {
     return "No";
@@ -42,7 +44,11 @@ const ReceiptItem = (props: Props) => {
               variant="contained"
               className={classes.markLegallyValid}
               onClick={() => {
-                if (window.confirm("Are you sure?")) {
+                if (
+                  window.confirm(
+                    `Are you sure you want to mark receipt number ${receipt.number} as LEGALLY VALID?${CONFIRM_WARNING}`
+                  )
+                ) {
                   props.setIsLegallyCompliant(true);
                 }
               }}
@@ -54,7 +60,11 @@ const ReceiptItem = (props: Props) => {
               variant="contained"
               className={classes.markLegallyInvalid}
               onClick={() => {
-                if (window.confirm("Are you sure?")) {
+                if (
+                  window.confirm(
+                    `Are you sure you want to mark receipt number ${receipt.number} as LEGALLY INVALID?${CONFIRM_WARNING}`
+                  )
+                ) {
                   props.setIsLegallyCompliant(false);
                 }
               }}
@@ -72,7 +82,11 @@ const ReceiptItem = (props: Props) => {
             variant="contained"
             color="inherit"
             onClick={() => {
-              if (window.confirm("Are you sure?")) {
+              if (
+                window.confirm(
+                  `Are you sure you want to mark receipt number ${receipt.number} PAPER COPY RECEIVED?${CONFIRM_WARNING}`
+                )
+              ) {
                 props.setPaperCopyReceived();
               }
             }}
@@ -89,7 +103,11 @@ const ReceiptItem = (props: Props) => {
             variant="contained"
             color="inherit"
             onClick={() => {
-              if (window.confirm("Are you sure?")) {
+              if (
+                window.confirm(
+                  `Are you sure you want to mark receipt number ${receipt.number} as PAID?${CONFIRM_WARNING}`
+                )
+              ) {
                 props.setHasBeenPaid();
               }
             }}
