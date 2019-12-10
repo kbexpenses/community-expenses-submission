@@ -32,6 +32,12 @@ export type ReceiptReturn = {
   pay_to_name?: string;
   pay_to_iban?: string;
   pay_to_notes?: string;
+  user_profile: {
+    id: string;
+    name: string;
+    email: string;
+    phone_number: string;
+  };
 };
 
 const ReceiptAdminQuery = gql`
@@ -46,6 +52,12 @@ const ReceiptAdminQuery = gql`
       pay_to_name
       pay_to_iban
       pay_to_notes
+      user_profile {
+        id
+        name
+        email
+        phone_number
+      }
     }
   }
 `;

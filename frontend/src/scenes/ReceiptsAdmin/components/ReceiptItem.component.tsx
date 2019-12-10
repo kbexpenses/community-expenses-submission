@@ -31,6 +31,10 @@ const ReceiptItem = (props: Props) => {
     <Paper key={receipt.id} className={classes.padder}>
       <div>Number: {receipt.number}</div>
       <div>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</div>
+      <div>
+        Name: {receipt.user_profile?.name} ({receipt.user_profile?.email} /{" "}
+        {receipt.user_profile?.phone_number})
+      </div>
       <div>Pay to name: {receipt.pay_to_name}</div>
       <div>Pay to IBAN: {receipt.pay_to_iban}</div>
       <div>Pay to notes: {receipt.pay_to_notes}</div>
