@@ -24,8 +24,13 @@ const Bar: React.FC<Props> = (props: Props) => {
               Community Expenses
             </Typography>
           </Link>
-          <Link to={isAdmin ? "/receipts/admin" : "/receipts"}>
-            <Button color="inherit">Receipts</Button>
+          {isAdmin ? (
+            <Link to="/receipts/admin">
+              <Button color="inherit">Receipts</Button>
+            </Link>
+          ) : null}
+          <Link to="/receipts">
+            <Button color="inherit">My Receipts</Button>
           </Link>
           <Link to="/budget">
             <Button color="inherit">Budget</Button>
