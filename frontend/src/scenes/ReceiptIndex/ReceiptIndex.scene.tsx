@@ -48,7 +48,10 @@ const ReceiptIndex = () => {
     );
   }
 
-  const { receipts } = data;
+  const unsortedReceipts: ReceiptReturn[] = data.receipts;
+  const receipts = unsortedReceipts
+    .concat([])
+    .sort((r1, r2) => r1.number - r2.number);
 
   return (
     <div>
