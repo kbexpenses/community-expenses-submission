@@ -33,10 +33,10 @@ export type ReceiptReturn = {
   pay_to_iban?: string;
   pay_to_notes?: string;
   user_profile: {
-    id: string;
-    name: string;
-    email: string;
-    phone_number: string;
+    id?: string;
+    name?: string;
+    email?: string;
+    phone_number?: string;
   };
 };
 
