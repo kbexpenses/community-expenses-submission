@@ -60,7 +60,7 @@ const BudgetIndex = () => {
       <ul>
         {budget_categories.map(budget_category => {
           return (
-            <li>
+            <li key={budget_category.id}>
               <p>{budget_category.name}</p>
               <p>Budget: €{(budget_category.budget_cents / 100).toFixed(2)}</p>
               <p>
