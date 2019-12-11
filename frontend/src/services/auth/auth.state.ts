@@ -1,4 +1,7 @@
 import { Action } from "redux";
+import { AppState } from "../../store";
+
+const getState = (state: AppState): State => state.auth;
 
 const LOGIN_SUCCESSFUL = "app/auth/SUCCESSFUL_LOGIN";
 interface LoginSuccessfulAction extends Action<typeof LOGIN_SUCCESSFUL> {
@@ -18,6 +21,11 @@ export const loginSuccessful = (
       roles
     }
   };
+};
+
+export const doesUserHaveRole = (state: AppState, role: string) => {
+  const auth = getState(state);
+  return auth.roles.indexOf(role) !== -1;
 };
 
 type State = {
