@@ -1,15 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+
 import { createStyles, withStyles, WithStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+import { AppState } from "../../store";
 import { showLock } from "../../services/auth/auth.service";
+import { doesUserHaveRole } from "../../services/auth/auth.state";
 
 const Bar: React.FC<Props> = (props: Props) => {
-  const { classes } = props;
+  const { classes, isAdmin } = props;
 
   return (
     <div className={classes.root}>
@@ -20,8 +24,11 @@ const Bar: React.FC<Props> = (props: Props) => {
               Community Expenses
             </Typography>
           </Link>
-          <Link to="/receipts">
+          <Link to={isAdmin ? "/receipts/admin" : "/receipts"}>
             <Button color="inherit">Receipts</Button>
+          </Link>
+          <Link to="/budget">
+            <Button color="inherit">Budget</Button>
           </Link>
           <Link to="/profile">
             <Button color="inherit">Profile</Button>
@@ -40,6 +47,12 @@ const Bar: React.FC<Props> = (props: Props) => {
   );
 };
 
+const mapStateToProps = (state: AppState) => {
+  return {
+    isAdmin: doesUserHaveRole(state, "admin")
+  };
+};
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -50,6 +63,8 @@ const styles = (theme: Theme) =>
     }
   });
 
-type Props = WithStyles<typeof styles>;
+type StateProps = ReturnType<typeof mapStateToProps>;
 
-export default withStyles(styles)(Bar);
+type Props = StateProps & WithStyles<typeof styles>;
+
+export default connect(mapStateToProps)(withStyles(styles)(Bar));
