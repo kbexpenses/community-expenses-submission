@@ -1,0 +1,6 @@
+- args:
+    relationship: receipt_budget_category_allocations
+    table:
+      name: budget_categories
+      schema: public
+  type: drop_relationship
