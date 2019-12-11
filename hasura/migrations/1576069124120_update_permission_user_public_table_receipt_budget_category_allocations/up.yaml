@@ -1,0 +1,20 @@
+- args:
+    permission:
+      allow_upsert: true
+      check:
+        receipt:
+          user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+      - amount_cents
+      - budget_category_id
+      - receipt_id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: receipt_budget_category_allocations
+      schema: public
+  type: create_insert_permission

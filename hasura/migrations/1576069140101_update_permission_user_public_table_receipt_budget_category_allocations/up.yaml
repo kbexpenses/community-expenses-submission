@@ -1,0 +1,20 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - amount_cents
+      - created_at
+      - updated_at
+      - budget_category_id
+      - id
+      - receipt_id
+      filter:
+        receipt:
+          user_id:
+            _eq: X-Hasura-User-Id
+      limit: null
+    role: user
+    table:
+      name: receipt_budget_category_allocations
+      schema: public
+  type: create_select_permission
