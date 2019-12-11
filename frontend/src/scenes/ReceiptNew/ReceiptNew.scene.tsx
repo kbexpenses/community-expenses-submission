@@ -3,7 +3,14 @@ import gql from "graphql-tag";
 import { buildASTSchema } from "graphql";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
-import { AutoForm, AutoField, NumField } from "uniforms-material";
+import {
+  AutoForm,
+  AutoField,
+  NumField,
+  ListField,
+  NestField,
+  SelectField
+} from "uniforms-material";
 import Button from "@material-ui/core/Button";
 
 import { getUserId } from "../../services/auth/auth.service";
@@ -21,10 +28,15 @@ type ReceiptModel = {
 };
 
 const formSchema = gql`
+  type ReceiptBudgetCategoryAllocation {
+    budget_category: String
+    amount: Float
+  }
   type Receipt {
     file_url: String
     amount: String
     date: String
+    budget_allocations: [ReceiptBudgetCategoryAllocation!]
     includes_personal_info: Boolean
     pay_to_name: String
     pay_to_iban: String
@@ -131,16 +143,12 @@ const ReceiptNew = () => {
   }
 
   const { budget_categories } = data;
+  const budget_categories_names = budget_categories.map(b => b.name);
   const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
 
   return (
     <div>
       <h1>Enter new receipt</h1>
-      <ul>
-        {budget_categories.map((cat: { id: string; name: string }) => {
-          return <li key={cat.id}>{cat.name}</li>;
-        })}
-      </ul>
       <AutoForm
         schema={bridge}
         model={{ includes_personal_info: true, pay_to_iban, pay_to_name }}
@@ -173,6 +181,21 @@ const ReceiptNew = () => {
         <AutoField name="file_url" />
         <NumField decimal name="amount" />
         <AutoField name="date" />
+        <h3>Categories</h3>
+        <p>Which project category is this receipt being charged to?</p>
+        <ListField name="budget_allocations" initialCount={1} label={false}>
+          <NestField name="$">
+            <SelectField
+              name="budget_category"
+              label="Budget category"
+              allowedValues={budget_categories_names}
+            />
+            <AutoField
+              name="amount"
+              label="Amount in EUR (or leave blank if only 1 category)"
+            />
+          </NestField>
+        </ListField>
         <h3>Payment</h3>
         <p>Input the details of how this invoice should be paid.</p>
         <AutoField name="pay_to_name" />
