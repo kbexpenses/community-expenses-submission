@@ -134,7 +134,23 @@ const ReceiptNew = () => {
           const { amount, includes_personal_info, ...object } = model;
           const amount_cents = Math.round(amount * 100);
 
-          // const allocations: any[] = [];
+          const budget_allocations = model.budget_allocations.map(
+            budget_allocation => {
+              const budget_category = budget_categories.find(
+                b => b.name === budget_allocation.budget_category
+              );
+              if (!budget_category) {
+                throw new Error("Unable to find budget category ID. #9gNLUG");
+              }
+
+              const amount_cents = Math.round(budget_allocation.amount * 100);
+
+              return {
+                budget_category_id: budget_category.id,
+                amount_cents
+              };
+            }
+          );
 
           try {
             await insertReceipt({
@@ -143,10 +159,10 @@ const ReceiptNew = () => {
                   ...object,
                   user_id: getUserId(),
                   amount_cents,
-                  includes_personal_info: !!includes_personal_info
-                  // budget_allocations: {
-                  //   data: allocations
-                  // }
+                  includes_personal_info: !!includes_personal_info,
+                  budget_allocations: {
+                    data: budget_allocations
+                  }
                 }
               }
             });
