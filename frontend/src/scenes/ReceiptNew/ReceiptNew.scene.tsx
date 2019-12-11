@@ -164,11 +164,10 @@ const ReceiptNew = () => {
                 }
               }
             });
+            alert("Submission success");
           } catch (error) {
             alert(`Submission failed #vuaiAI. ${error.message}`);
           }
-
-          alert("Submission success");
         }}
       >
         <AutoField name="file_url" />
