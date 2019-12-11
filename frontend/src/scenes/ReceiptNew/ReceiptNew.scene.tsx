@@ -102,7 +102,13 @@ const NewReceiptMutation = gql`
 `;
 
 const ReceiptNew = () => {
-  const { loading, error, data } = useQuery(NewReceiptQuery, {
+  const { loading, error, data } = useQuery<
+    {
+      budget_categories: { id: string; name: string }[];
+      user_profiles: { name: string; iban: string }[];
+    },
+    { user_id?: string | null }
+  >(NewReceiptQuery, {
     variables: {
       user_id: getUserId()
     }
