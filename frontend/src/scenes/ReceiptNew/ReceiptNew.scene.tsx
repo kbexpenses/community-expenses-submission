@@ -9,18 +9,25 @@ import {
   NumField,
   ListField,
   NestField,
-  SelectField
+  SelectField,
+  ListDelField,
+  ErrorField
 } from "uniforms-material";
 import Button from "@material-ui/core/Button";
 
+import { formSchemaValidator } from "./ReceiptNew.helpers";
 import { getUserId } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
 
 // This tracks what is entered in the form
-type ReceiptModel = {
+export type ReceiptModel = {
   file_url: string;
-  amount: string;
+  amount: number;
   date: string;
+  budget_allocations: {
+    budget_category: string;
+    amount: number;
+  }[];
   includes_personal_info: boolean;
   pay_to_name: string;
   pay_to_iban: string;
@@ -34,7 +41,7 @@ const formSchema = gql`
   }
   type Receipt {
     file_url: String
-    amount: String
+    amount: Float
     date: String
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
     includes_personal_info: Boolean
@@ -44,35 +51,6 @@ const formSchema = gql`
   }
 `;
 const formSchemaType = buildASTSchema(formSchema).getType("Receipt");
-const formSchemaValidator = (model: ReceiptModel) => {
-  const details = [];
-  if (!model.file_url) {
-    details.push({ name: "file_url", message: "A file is required" });
-  }
-  if (!model.amount) {
-    details.push({
-      name: "amount",
-      message: "Please specify the amount of this receipt"
-    });
-  }
-  if (!model.date) {
-    details.push({
-      name: "date",
-      message: "Please enter the date on the receipt"
-    });
-  }
-  if (!model.pay_to_iban && !model.pay_to_notes) {
-    details.push({
-      name: "pay_to_iban",
-      message:
-        "Please enter the IBAN of where we should pay, or specify a note instead."
-    });
-  }
-  if (details.length) {
-    // eslint-disable-next-line no-throw-literal
-    throw { details };
-  }
-};
 const formSchemaExtras = {
   date: {
     type: "Date"
@@ -154,7 +132,7 @@ const ReceiptNew = () => {
         model={{ includes_personal_info: true, pay_to_iban, pay_to_name }}
         onSubmit={async (model: ReceiptModel) => {
           const { amount, includes_personal_info, ...object } = model;
-          const amount_cents = Math.round(parseFloat(amount) * 100);
+          const amount_cents = Math.round(amount * 100);
 
           // const allocations: any[] = [];
 
@@ -194,6 +172,7 @@ const ReceiptNew = () => {
               name="amount"
               label="Amount in EUR (or leave blank if only 1 category)"
             />
+            <ListDelField name="" />
           </NestField>
         </ListField>
         <h3>Payment</h3>
