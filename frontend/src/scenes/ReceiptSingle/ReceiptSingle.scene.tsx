@@ -36,17 +36,17 @@ const ReceiptSingle = (props: Props) => {
     variables: { id }
   });
 
-  if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
   if (error) {
     return (
       <div>
         <p>Error #oHWwFx: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return (
+      <div>
+        <p>Loading...</p>
       </div>
     );
   }

@@ -92,17 +92,17 @@ const ReceiptAdmin = (props: Props) => {
     return <Redirect to="/" />;
   }
 
-  if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
   if (error) {
     return (
       <div>
         <p>Error #iY20Jq: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return (
+      <div>
+        <p>Loading...</p>
       </div>
     );
   }

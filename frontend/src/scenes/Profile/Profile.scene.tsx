@@ -75,17 +75,17 @@ const Profile = () => {
   const { loading, error, data } = useQuery(ProfileQuery);
   const [setProfile] = useMutation(SetProfileMutation);
 
-  if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
   if (error) {
     return (
       <div>
         <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return (
+      <div>
+        <p>Loading...</p>
       </div>
     );
   }
