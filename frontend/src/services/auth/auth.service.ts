@@ -1,4 +1,6 @@
 import Auth0Lock from "auth0-lock";
+import store from "../../store";
+import { loginSuccessful } from "./auth.state";
 
 const TOKEN_STORAGE_KEY = "_authToken";
 const USER_ID_STORAGE_KEY = "_userId";
@@ -10,13 +12,17 @@ const lock = new Auth0Lock(
 );
 
 lock.on("authenticated", (authResult: AuthResult) => {
-  localStorage.setItem(TOKEN_STORAGE_KEY, authResult.idToken);
-  localStorage.setItem(USER_ID_STORAGE_KEY, authResult.idTokenPayload.sub);
-
+  const userId = authResult.idTokenPayload.sub;
   const roles = (authResult.idTokenPayload as any)[
     "https://hasura.io/jwt/claims"
   ]["x-hasura-allowed-roles"];
+
+  localStorage.setItem(TOKEN_STORAGE_KEY, authResult.idToken);
+  localStorage.setItem(USER_ID_STORAGE_KEY, userId);
+
   localStorage.setItem(ROLES_STORAGE_KEY, JSON.stringify(roles));
+
+  store.dispatch(loginSuccessful(userId, roles));
 });
 
 export const showLock = () => {
@@ -39,3 +45,13 @@ export const userHasRole = (role: string) => {
   const roles = getRoles();
   return roles.indexOf(role) !== -1;
 };
+
+// We need to re-read these from `localStorage` on startup to ensure that our
+// redux store is kept up to date.
+const startup = () => {
+  const userId = getUserId();
+  const roles = getRoles();
+  if (!!userId && !!roles && roles.length > 0)
+    store.dispatch(loginSuccessful(userId, roles));
+};
+startup();

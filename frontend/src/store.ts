@@ -2,9 +2,11 @@ import thunkMiddleware from "redux-thunk";
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 
 import ReceiptNew from "./scenes/ReceiptNew/ReceiptNew.state";
+import auth from "./services/auth/auth.state";
 
 const reducer = combineReducers({
-  ReceiptNew
+  ReceiptNew,
+  auth
 });
 
 export type AppState = ReturnType<typeof reducer>;
