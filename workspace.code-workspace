@@ -5,6 +5,9 @@
 	},
 	{
 		"path": "hasura"
+	},
+	{
+		"path": "media-server"
 	}
 ],
   "settings": {}
