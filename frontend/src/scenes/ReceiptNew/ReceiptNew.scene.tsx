@@ -110,7 +110,6 @@ const ReceiptNew = () => {
     accept: ["image/*"],
     multiple: false,
     onDropAccepted: files => {
-      debugger;
       const data = new FormData();
       data.append("file", files[0]);
       axios
@@ -120,7 +119,6 @@ const ReceiptNew = () => {
           }
         })
         .then(response => {
-          debugger;
           setFileUrl(response.data.fileUrl);
         });
     }
