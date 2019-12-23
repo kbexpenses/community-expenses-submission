@@ -2,7 +2,7 @@
   "scripts": {
     "start": "hasura console"
   },
-  "dependencies": {
-    "hasura-cli": "^1.0.0-rc.1"
+  "devDependencies": {
+    "hasura-cli": "^1.0.0"
   }
 }
