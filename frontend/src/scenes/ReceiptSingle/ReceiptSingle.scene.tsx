@@ -2,6 +2,7 @@ import React from "react";
 import gql from "graphql-tag";
 import { RouteComponentProps } from "react-router";
 import { useQuery } from "react-apollo";
+import AuthImage from "../../components/AuthImage";
 
 const ReceiptSingleQuery = gql`
   query ReceiptSingleQuery($id: uuid!) {
@@ -64,6 +65,7 @@ const ReceiptSingle = (props: Props) => {
   return (
     <div>
       <h1>Receipt Single</h1>
+      <AuthImage file_url={receipt.file_url} />
       <p>ID: {receipt.id}</p>
       <p>Receipt Number: {receipt.number}</p>
       <p>Receipt date: {receipt.date}</p>
