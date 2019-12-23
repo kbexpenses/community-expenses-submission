@@ -8,9 +8,7 @@ const BudgetQuery = gql`
       id
       name
       budget_cents
-      receipt_budget_category_allocations_aggregate(
-        distinct_on: budget_category_id
-      ) {
+      receipt_budget_category_allocations_aggregate {
         aggregate {
           sum {
             amount_cents
