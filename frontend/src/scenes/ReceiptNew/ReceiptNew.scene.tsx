@@ -10,8 +10,7 @@ import {
   ListField,
   NestField,
   SelectField,
-  ListDelField,
-  ErrorField
+  ListDelField
 } from "uniforms-material";
 import Button from "@material-ui/core/Button";
 
