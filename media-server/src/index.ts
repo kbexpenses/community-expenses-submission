@@ -11,6 +11,17 @@ import send from "koa-send";
 const MEDIA_PATH = "./data/";
 const DEBUG = false;
 
+const ALLOW_ROLES = ["admin", "editor"];
+
+const isUserAdminOrEditor = (roles: string[]) => {
+  return !!ALLOW_ROLES.find(role => {
+    if (roles.indexOf(role) !== -1) {
+      return true;
+    }
+    return false;
+  });
+};
+
 const app = new Koa();
 
 app.use(cors());
@@ -63,7 +74,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx, next) => {
-  const { userId } = ctx.state;
+  const { userId, roles } = ctx.state;
 
   const [_, fileUserId, fileName] = ctx.path.split("/");
 
@@ -72,7 +83,7 @@ app.use(async (ctx, next) => {
     ctx.throw(404, "Not found #E56ubM");
   }
 
-  if (userId !== fileUserId) {
+  if (userId !== fileUserId && !isUserAdminOrEditor(roles)) {
     ctx.throw(404, "Not found #NgDJgR");
   }
 
