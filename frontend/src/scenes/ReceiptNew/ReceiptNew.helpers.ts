@@ -1,19 +1,9 @@
 import { ReceiptModel } from "./ReceiptNew.scene";
 
 export const formSchemaValidator = (model: ReceiptModel) => {
-  const {
-    file_url,
-    date,
-    amount,
-    pay_to_iban,
-    pay_to_notes,
-    budget_allocations
-  } = model;
+  const { date, amount, pay_to_iban, pay_to_notes, budget_allocations } = model;
   const details = [];
 
-  if (!file_url) {
-    details.push({ name: "file_url", message: "A file is required" });
-  }
   if (!amount) {
     details.push({
       name: "amount",

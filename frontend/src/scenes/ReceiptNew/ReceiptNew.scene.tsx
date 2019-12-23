@@ -189,7 +189,6 @@ const ReceiptNew = () => {
           }
         }}
       >
-        <AutoField name="file_url" />
         <NumField decimal name="amount" />
         <AutoField name="date" />
         <h3>Categories</h3>
