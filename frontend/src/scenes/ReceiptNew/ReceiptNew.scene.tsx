@@ -91,7 +91,7 @@ const NewReceiptMutation = gql`
 `;
 
 const ReceiptNew = () => {
-  const [haveFile, setHaveFile] = useState(false);
+  const [fileUrl, setFileUrl] = useState("");
 
   const { loading, error, data } = useQuery<
     {
@@ -125,13 +125,14 @@ const ReceiptNew = () => {
   const budget_categories_names = budget_categories.map(b => b.name);
   const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
 
-  if (!haveFile) {
+  if (fileUrl === "") {
     return (
       <div>
         <h1>Upload a file</h1>
         <Button
+          variant="contained"
           onClick={() => {
-            setHaveFile(true);
+            setFileUrl("http://localhost:4000/foo/bar.jpg");
           }}
         >
           Got File
