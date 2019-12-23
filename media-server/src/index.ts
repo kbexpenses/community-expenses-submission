@@ -6,6 +6,7 @@ import jwt from "koa-jwt";
 import cors from "@koa/cors";
 import { koaJwtSecret } from "jwks-rsa";
 import uuid from "uuid/v4";
+import send from "koa-send";
 
 const MEDIA_PATH = "./data/";
 
@@ -63,7 +64,13 @@ app.use(async (ctx, next) => {
     ctx.throw(404, "Not found #E56ubM");
   }
 
-  ctx.body = "Hello";
+  // Build the filename
+  const filePath = path.join(MEDIA_PATH, `${userId}__${fileName}`);
+  console.log("Sending filePath #RGm8Me", filePath);
+  await send(ctx, filePath);
+  console.log("File sent #RDz9XD");
+
+  // ctx.body = "Hello";
 });
 
 app.listen(4000);
