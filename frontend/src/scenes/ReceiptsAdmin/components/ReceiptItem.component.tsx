@@ -1,8 +1,10 @@
 import React from "react";
-import { ReceiptReturn } from "../ReceiptsAdmin.scene";
+import { Link } from "react-router-dom";
 
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+
+import { ReceiptReturn } from "../ReceiptsAdmin.scene";
 
 const CONFIRM_WARNING = `\n\nThis action is irreversible. There is no option to undo.`;
 
@@ -29,7 +31,9 @@ const ReceiptItem = (props: Props) => {
 
   return (
     <Paper key={receipt.id} className={classes.padder}>
-      <div>Number: {receipt.number}</div>
+      <div>
+        <Link to={`/receipts/${receipt.id}`}>Number: {receipt.number}</Link>
+      </div>
       <div>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</div>
       <div>
         Name: {receipt.user_profile?.name} ({receipt.user_profile?.email} /{" "}
