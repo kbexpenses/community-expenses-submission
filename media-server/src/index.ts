@@ -32,14 +32,19 @@ app.use(
 app.use(body({ multipart: true }));
 
 app.use(async (ctx, next) => {
+  ctx.state.userId = ctx.state.user.sub;
+  ctx.state.roles =
+    ctx.state.user["https://hasura.io/jwt/claims"]["x-hasura-allowed-roles"];
+  return await next();
+});
+
+app.use(async (ctx, next) => {
   // Ignore any requests which are not POST
   if (ctx.method !== "POST") {
     return await next();
   }
 
-  const userId = ctx.state.user.sub;
-  const roles =
-    ctx.state.user["https://hasura.io/jwt/claims"]["x-hasura-allowed-roles"];
+  const { userId } = ctx.state;
 
   // If we do not have exactly 1 file, return 500
   if (!ctx.request.files || !ctx.request.files.file) {
@@ -58,15 +63,21 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx, next) => {
-  const [_, userId, fileName] = ctx.path.split("/");
+  const { userId } = ctx.state;
 
-  if (!userId || !fileName) {
+  const [_, fileUserId, fileName] = ctx.path.split("/");
+
+  if (!fileUserId || !fileName) {
     if (DEBUG) console.log("Not found #j2o4dm", ctx.path);
     ctx.throw(404, "Not found #E56ubM");
   }
 
+  if (userId !== fileUserId) {
+    ctx.throw(404, "Not found #NgDJgR");
+  }
+
   // Build the filename
-  const filePath = path.join(MEDIA_PATH, `${userId}__${fileName}`);
+  const filePath = path.join(MEDIA_PATH, `${fileUserId}__${fileName}`);
   if (DEBUG) console.log("Sending filePath #RGm8Me", filePath);
   await send(ctx, filePath);
   if (DEBUG) console.log("File sent #RDz9XD");
