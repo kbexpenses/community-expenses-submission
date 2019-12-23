@@ -45,6 +45,7 @@ const reducer = (state: State = empty, action: AuthActions) => {
     case LOGIN_SUCCESSFUL: {
       return {
         ...state,
+        isLoggedIn: true,
         userId: action.payload.userId,
         roles: action.payload.roles
       };
