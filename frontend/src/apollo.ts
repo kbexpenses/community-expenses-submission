@@ -12,6 +12,8 @@ const client = new ApolloClient({
       headers: {
         Authorization: `Bearer ${getToken()}`,
         "x-hasura-role": userHasRole("admin") ? "admin" : "user"
+        // "x-hasura-admin-secret":
+        //   "jwACehZsUDArTKlSTEnqOqbl5j42uGulK4gKpYJ2n2SW7Skn28QCvrxUrBhgcaz"
       }
     });
   }
