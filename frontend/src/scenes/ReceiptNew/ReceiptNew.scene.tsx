@@ -20,6 +20,7 @@ import { formSchemaValidator } from "./ReceiptNew.helpers";
 import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
 import AuthImage from "../../components/AuthImage";
+import { useHistory } from "react-router-dom";
 
 // This tracks what is entered in the form
 export type ReceiptModel = {
@@ -93,6 +94,8 @@ const NewReceiptMutation = gql`
 
 const ReceiptNew = () => {
   const [fileUrl, setFileUrl] = useState("");
+
+  const history = useHistory();
 
   const { loading, error, data } = useQuery<
     {
@@ -194,7 +197,7 @@ const ReceiptNew = () => {
           );
 
           try {
-            await insertReceipt({
+            const response = await insertReceipt({
               variables: {
                 object: {
                   ...object,
@@ -209,6 +212,8 @@ const ReceiptNew = () => {
               }
             });
             alert("Submission success");
+            const receiptId = response.data.insert_receipts.returning[0].id;
+            history.push(`/receipts/${receiptId}`);
           } catch (error) {
             alert(`Submission failed #vuaiAI. ${error.message}`);
           }
