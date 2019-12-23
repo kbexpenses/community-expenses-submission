@@ -9,6 +9,7 @@ import uuid from "uuid/v4";
 import send from "koa-send";
 
 const MEDIA_PATH = "./data/";
+const DEBUG = false;
 
 const app = new Koa();
 
@@ -42,7 +43,7 @@ app.use(async (ctx, next) => {
 
   // If we do not have exactly 1 file, return 500
   if (!ctx.request.files || !ctx.request.files.file) {
-    console.log("No files #mgCb2N", ctx.request.files, ctx.request);
+    if (DEBUG) console.log("No files #mgCb2N", ctx.request.files, ctx.request);
     ctx.throw(500, "Failed to upload a file #WkdnEy");
   }
 
@@ -60,15 +61,15 @@ app.use(async (ctx, next) => {
   const [_, userId, fileName] = ctx.path.split("/");
 
   if (!userId || !fileName) {
-    console.log("Not found #j2o4dm", ctx.path);
+    if (DEBUG) console.log("Not found #j2o4dm", ctx.path);
     ctx.throw(404, "Not found #E56ubM");
   }
 
   // Build the filename
   const filePath = path.join(MEDIA_PATH, `${userId}__${fileName}`);
-  console.log("Sending filePath #RGm8Me", filePath);
+  if (DEBUG) console.log("Sending filePath #RGm8Me", filePath);
   await send(ctx, filePath);
-  console.log("File sent #RDz9XD");
+  if (DEBUG) console.log("File sent #RDz9XD");
 
   // ctx.body = "Hello";
 });
