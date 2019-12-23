@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import gql from "graphql-tag";
 import { buildASTSchema } from "graphql";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
+import axios from "axios";
 import {
   AutoForm,
   AutoField,
@@ -15,12 +17,11 @@ import {
 import Button from "@material-ui/core/Button";
 
 import { formSchemaValidator } from "./ReceiptNew.helpers";
-import { getUserId } from "../../services/auth/auth.service";
+import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
 
 // This tracks what is entered in the form
 export type ReceiptModel = {
-  file_url: string;
   amount: number;
   date: string;
   budget_allocations: {
@@ -39,7 +40,6 @@ const formSchema = gql`
     amount: Float
   }
   type Receipt {
-    file_url: String
     amount: Float
     date: String
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
@@ -106,6 +106,26 @@ const ReceiptNew = () => {
   });
   const [insertReceipt] = useMutation(NewReceiptMutation);
 
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: ["image/*"],
+    multiple: false,
+    onDropAccepted: files => {
+      debugger;
+      const data = new FormData();
+      data.append("file", files[0]);
+      axios
+        .post("http://localhost:4000", data, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`
+          }
+        })
+        .then(response => {
+          debugger;
+          setFileUrl(response.data.fileUrl);
+        });
+    }
+  });
+
   if (error) {
     return (
       <div>
@@ -129,14 +149,11 @@ const ReceiptNew = () => {
     return (
       <div>
         <h1>Upload a file</h1>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setFileUrl("http://localhost:4000/foo/bar.jpg");
-          }}
-        >
-          Got File
-        </Button>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <p>Drag and drop a file here, or click to select a file.</p>
+          <Button variant="contained">Select a file</Button>
+        </div>
       </div>
     );
   }
@@ -174,6 +191,7 @@ const ReceiptNew = () => {
               variables: {
                 object: {
                   ...object,
+                  file_url: fileUrl,
                   user_id: getUserId(),
                   amount_cents,
                   includes_personal_info: !!includes_personal_info,
