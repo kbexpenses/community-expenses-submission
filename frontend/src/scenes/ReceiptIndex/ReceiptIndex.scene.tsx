@@ -28,6 +28,7 @@ const ReceiptIndexQuery = gql`
 
 const ReceiptIndex = () => {
   const { loading, error, data } = useQuery(ReceiptIndexQuery, {
+    fetchPolicy: "cache-and-network",
     variables: {
       user_id: getUserId()
     }
