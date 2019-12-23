@@ -177,11 +177,18 @@ const ReceiptNew = () => {
                 throw new Error("Unable to find budget category ID. #9gNLUG");
               }
 
-              const amount_cents = Math.round(budget_allocation.amount * 100);
+              // If there is only a single budget category, and it does not have
+              // an amount, then copy the amount from the receipt, assuming the
+              // entire value is assigned to this category.
+              const allocation_amount_cents =
+                model.budget_allocations.length === 1 &&
+                !budget_allocation.amount
+                  ? amount_cents
+                  : Math.round(budget_allocation.amount * 100);
 
               return {
                 budget_category_id: budget_category.id,
-                amount_cents
+                amount_cents: allocation_amount_cents
               };
             }
           );
