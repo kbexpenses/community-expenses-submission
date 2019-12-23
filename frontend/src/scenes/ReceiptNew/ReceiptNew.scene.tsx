@@ -19,6 +19,7 @@ import Button from "@material-ui/core/Button";
 import { formSchemaValidator } from "./ReceiptNew.helpers";
 import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
+import AuthImage from "../../components/AuthImage";
 
 // This tracks what is entered in the form
 export type ReceiptModel = {
@@ -158,7 +159,8 @@ const ReceiptNew = () => {
 
   return (
     <div>
-      <h1>Enter new receipt</h1>
+      <h1>Enter receipt info</h1>
+      <AuthImage file_url={fileUrl} />
       <AutoForm
         schema={bridge}
         model={{ includes_personal_info: true, pay_to_iban, pay_to_name }}
