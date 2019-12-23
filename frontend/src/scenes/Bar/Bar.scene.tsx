@@ -9,11 +9,11 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import { AppState } from "../../store";
-import { showLock } from "../../services/auth/auth.service";
+import { showLock, logout } from "../../services/auth/auth.service";
 import { doesUserHaveRole } from "../../services/auth/auth.state";
 
-const Bar: React.FC<Props> = (props: Props) => {
-  const { classes, isAdmin } = props;
+const Bar: React.FC<Props> = props => {
+  const { classes, isLoggedIn, isAdmin } = props;
 
   return (
     <div className={classes.root}>
@@ -29,23 +29,36 @@ const Bar: React.FC<Props> = (props: Props) => {
               <Button color="inherit">Receipts</Button>
             </Link>
           ) : null}
-          <Link to="/receipts">
-            <Button color="inherit">My Receipts</Button>
-          </Link>
-          <Link to="/budget">
-            <Button color="inherit">Budget</Button>
-          </Link>
-          <Link to="/profile">
-            <Button color="inherit">Profile</Button>
-          </Link>
-          <Button
-            color="inherit"
-            onClick={() => {
-              showLock();
-            }}
-          >
-            Login
-          </Button>
+          {isLoggedIn ? (
+            <>
+              <Link to="/receipts">
+                <Button color="inherit">My Receipts</Button>
+              </Link>
+              <Link to="/budget">
+                <Button color="inherit">Budget</Button>
+              </Link>
+              <Link to="/profile">
+                <Button color="inherit">Profile</Button>
+              </Link>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button
+              color="inherit"
+              onClick={() => {
+                showLock();
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>
@@ -54,6 +67,7 @@ const Bar: React.FC<Props> = (props: Props) => {
 
 const mapStateToProps = (state: AppState) => {
   return {
+    isLoggedIn: state.auth.isLoggedIn,
     isAdmin: doesUserHaveRole(state, "admin")
   };
 };

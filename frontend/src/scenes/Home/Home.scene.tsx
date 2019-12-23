@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import {
   Button,
@@ -11,22 +12,31 @@ import {
 import { showLock } from "../../services/auth/auth.service";
 import { AppState } from "../../store";
 
-const Home = (props: Props) => {
+const Home: React.FC<Props> = props => {
   const { classes, isLoggedIn } = props;
+
+  if (!isLoggedIn) {
+    return (
+      <div className={classes.anonContainer}>
+        <p>Login to get started.</p>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={event => {
+            event.preventDefault();
+            showLock();
+          }}
+        >
+          Login or Sign Up
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className={classes.container}>
-      <p>Login to get started.</p>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={event => {
-          event.preventDefault();
-          showLock();
-        }}
-      >
-        Login or Sign Up
-      </Button>
+      <h1>You're logged in</h1>
+      <p>Use the menu above to upload receipts, etc.</p>
     </div>
   );
 };
@@ -39,15 +49,16 @@ const mapStateToProps = (state: AppState) => {
 
 const styles = (theme: Theme) =>
   createStyles({
-    container: {
+    anonContainer: {
       paddingTop: "10vh",
       textAlign: "center",
       fontSize: "3em"
-    }
+    },
+    container: {}
   });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 
 type Props = StateProps & WithStyles<typeof styles>;
 
-export default withStyles(styles)(Home);
+export default connect(mapStateToProps)(withStyles(styles)(Home));
