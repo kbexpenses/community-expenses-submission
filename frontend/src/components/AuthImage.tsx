@@ -10,6 +10,7 @@ const AuthImage = (props: Props) => {
   const { file_url } = props;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
   const fileData = useRef("");
 
   // const reader = new FileReader();
@@ -29,15 +30,28 @@ const AuthImage = (props: Props) => {
         );
         // fileData.current.readAsDataURL(new Blob(response.data));
         setIsLoading(false);
+      })
+      .catch(error => {
+        setError(error.message);
       });
   }, [file_url]);
+
+  if (error !== "") {
+    return <div>IMAGE ERROR #rIVwbz: {error}</div>;
+  }
 
   if (isLoading) {
     return <div>Loading</div>;
   }
 
   return (
-    <img src={`data:image/jpeg;base64,${fileData.current}`} alt="The receipt" />
+    <div>
+      <img
+        style={{ maxWidth: "600px", maxHeight: "400px" }}
+        src={`data:image/jpeg;base64,${fileData.current}`}
+        alt="The receipt"
+      />
+    </div>
   );
 };
 
