@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
 import { buildASTSchema } from "graphql";
 import { useQuery, useMutation } from "@apollo/react-hooks";
@@ -91,6 +91,8 @@ const NewReceiptMutation = gql`
 `;
 
 const ReceiptNew = () => {
+  const [haveFile, setHaveFile] = useState(false);
+
   const { loading, error, data } = useQuery<
     {
       budget_categories: { id: string; name: string }[];
@@ -122,6 +124,21 @@ const ReceiptNew = () => {
   const { budget_categories } = data;
   const budget_categories_names = budget_categories.map(b => b.name);
   const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
+
+  if (!haveFile) {
+    return (
+      <div>
+        <h1>Upload a file</h1>
+        <Button
+          onClick={() => {
+            setHaveFile(true);
+          }}
+        >
+          Got File
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>
