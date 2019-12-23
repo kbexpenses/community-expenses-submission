@@ -1,6 +1,6 @@
 import Auth0Lock from "auth0-lock";
 import store from "../../store";
-import { loginSuccessful } from "./auth.state";
+import { loginSuccessful, logoutActionCreator } from "./auth.state";
 
 const TOKEN_STORAGE_KEY = "_authToken";
 const USER_ID_STORAGE_KEY = "_userId";
@@ -27,6 +27,12 @@ lock.on("authenticated", (authResult: AuthResult) => {
 
 export const showLock = () => {
   lock.show();
+};
+
+export const logout = () => {
+  localStorage.clear();
+  store.dispatch(logoutActionCreator());
+  lock.logout({ returnTo: "http://localhost:3000/" });
 };
 
 export const getToken = () => {

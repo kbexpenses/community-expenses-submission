@@ -23,6 +23,19 @@ export const loginSuccessful = (
   };
 };
 
+const LOGOUT = "app/auth/LOGOUT";
+interface LogoutAction extends Action<typeof LOGOUT> {
+  payload: {};
+}
+// Name this explicity to avoid confusion with the `logout()` function exported
+// in the `auth.service`.
+export const logoutActionCreator = (): LogoutAction => {
+  return {
+    type: LOGOUT,
+    payload: {}
+  };
+};
+
 export const doesUserHaveRole = (state: AppState, role: string) => {
   const auth = getState(state);
   return auth.roles.indexOf(role) !== -1;
@@ -38,7 +51,7 @@ const empty = {
   roles: []
 };
 
-type AuthActions = LoginSuccessfulAction;
+type AuthActions = LoginSuccessfulAction | LogoutAction;
 
 const reducer = (state: State = empty, action: AuthActions) => {
   switch (action.type) {
@@ -49,6 +62,10 @@ const reducer = (state: State = empty, action: AuthActions) => {
         userId: action.payload.userId,
         roles: action.payload.roles
       };
+    }
+
+    case LOGOUT: {
+      return empty;
     }
   }
 
