@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import { connect } from "react-redux";
 import {
   createStyles,
@@ -18,6 +14,8 @@ import Container from "@material-ui/core/Container";
 import { responsiveFontSizes } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
+import { AppState } from "../../store";
+
 import Bar from "../Bar/Bar.scene";
 import Home from "../Home/Home.scene";
 import Profile from "../Profile/Profile.scene";
@@ -26,17 +24,18 @@ import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
 import ReceiptAdmin from "../ReceiptsAdmin/ReceiptsAdmin.scene";
 import ReceiptSingle from "../ReceiptSingle/ReceiptSingle.scene";
 import BudgetIndex from "../BudgetIndex/BudgetIndex.scene";
-import { AppState } from "../../store";
 
 const baseTheme = createMuiTheme();
 const theme = responsiveFontSizes(baseTheme);
+
+export const history = createBrowserHistory();
 
 const Routes = (props: Props) => {
   const { isLoggedIn } = props;
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router history={history}>
         <Bar />
         <CssBaseline />
         <Container>
@@ -52,7 +51,7 @@ const Routes = (props: Props) => {
             </Switch>
           ) : (
             <>
-              <Redirect to="/" />
+              {/* <Redirect to="/" /> */}
               <Home />
             </>
           )}
