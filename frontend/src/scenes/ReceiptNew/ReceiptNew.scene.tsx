@@ -150,7 +150,7 @@ const ReceiptNew: React.FC<Props> = props => {
   const budget_categories_names = budget_categories.map(b => b.name);
   const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
 
-  if (fileUrl !== "") {
+  if (fileUrl === "") {
     return (
       <div>
         <h1>Upload a file</h1>
