@@ -1,4 +1,5 @@
 import Auth0Lock from "auth0-lock";
+
 import store from "../../store";
 import { loginSuccessful, logoutActionCreator } from "./auth.state";
 
@@ -8,8 +9,24 @@ const ROLES_STORAGE_KEY = "_roles";
 
 const lock = new Auth0Lock(
   "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
-  "community-expenses-dev.eu.auth0.com"
+  "community-expenses-dev.eu.auth0.com",
+  {
+    auth: {
+      responseType: "token",
+      redirect: false,
+      redirectUrl: "http://localhost:3000"
+    }
+  }
 );
+
+/*
+lock.on("authorization_error", error => {
+  debugger;
+});
+lock.on("unrecoverable_error", error => {
+  debugger;
+});
+*/
 
 lock.on("authenticated", (authResult: AuthResult) => {
   const userId = authResult.idTokenPayload.sub;
