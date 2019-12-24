@@ -64,14 +64,13 @@ const ReceiptSingle = (props: Props) => {
 
   return (
     <div>
-      <h1>Receipt Single</h1>
+      <h1>Receipt {receipt.number}</h1>
       <AuthImage file_url={receipt.file_url} />
-      <p>ID: {receipt.id}</p>
       <p>Receipt Number: {receipt.number}</p>
       <p>Receipt date: {receipt.date}</p>
       <p>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</p>
-      <p>Pay to: {receipt.pay_to_name}</p>
-      <p>IBAN: {receipt.pay_to_iban}</p>
+      <p>Pay to Name: {receipt.pay_to_name}</p>
+      <p>Pay to IBAN: {receipt.pay_to_iban}</p>
     </div>
   );
 };
