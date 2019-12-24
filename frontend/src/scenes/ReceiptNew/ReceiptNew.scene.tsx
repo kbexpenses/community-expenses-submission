@@ -21,6 +21,7 @@ import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
 import AuthImage from "../../components/AuthImage";
 import { useHistory } from "react-router-dom";
+import { withStyles, Theme, createStyles, WithStyles } from "@material-ui/core";
 
 // This tracks what is entered in the form
 export type ReceiptModel = {
@@ -92,7 +93,9 @@ const NewReceiptMutation = gql`
   }
 `;
 
-const ReceiptNew = () => {
+const ReceiptNew: React.FC<Props> = props => {
+  const { classes } = props;
+
   const [fileUrl, setFileUrl] = useState("");
 
   const history = useHistory();
@@ -147,11 +150,11 @@ const ReceiptNew = () => {
   const budget_categories_names = budget_categories.map(b => b.name);
   const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
 
-  if (fileUrl === "") {
+  if (fileUrl !== "") {
     return (
       <div>
         <h1>Upload a file</h1>
-        <div {...getRootProps()}>
+        <div {...getRootProps()} className={classes.uploader}>
           <input {...getInputProps()} />
           <p>Drag and drop a file here, or click to select a file.</p>
           <Button variant="contained">Select a file</Button>
@@ -161,7 +164,7 @@ const ReceiptNew = () => {
   }
 
   return (
-    <div>
+    <div className={classes.container}>
       <h1>Enter receipt info</h1>
       <AuthImage file_url={fileUrl} />
       <AutoForm
@@ -219,8 +222,16 @@ const ReceiptNew = () => {
           }
         }}
       >
+        <h3>Details</h3>
         <NumField decimal name="amount" />
         <AutoField name="date" />
+
+        <h3>Payment</h3>
+        <p>Input the details of how this invoice should be paid.</p>
+        <AutoField name="pay_to_name" />
+        <AutoField name="pay_to_iban" />
+        <AutoField name="pay_to_notes" />
+
         <h3>Categories</h3>
         <p>Which project category is this receipt being charged to?</p>
         <ListField name="budget_allocations" initialCount={1} label={false}>
@@ -237,11 +248,7 @@ const ReceiptNew = () => {
             <ListDelField name="" />
           </NestField>
         </ListField>
-        <h3>Payment</h3>
-        <p>Input the details of how this invoice should be paid.</p>
-        <AutoField name="pay_to_name" />
-        <AutoField name="pay_to_iban" />
-        <AutoField name="pay_to_notes" />
+
         <h3>Personal information</h3>
         <p>
           If this receipt does not contain the name and address of any
@@ -251,12 +258,53 @@ const ReceiptNew = () => {
         </p>
         <AutoField name="includes_personal_info" />
         <ErrorsField />
-        <Button type="submit" variant="contained">
-          Submit
-        </Button>
+
+        <p>
+          When you're happy with the data you've entered, submit this receipt.
+          There is no undo, so please double check the details above.
+        </p>
+        <div className={classes.submitWrapper}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            className={classes.submit}
+          >
+            Submit
+          </Button>
+        </div>
       </AutoForm>
     </div>
   );
 };
 
-export default ReceiptNew;
+const styles = (theme: Theme) =>
+  createStyles({
+    container: {
+      maxWidth: "450px",
+      paddingBottom: "80px"
+    },
+    title: {
+      flexGrow: 1
+    },
+    submit: {
+      marginTop: "20px"
+    },
+    submitWrapper: {
+      textAlign: "center"
+    },
+    uploader: {
+      width: "80%",
+      marginLeft: "auto",
+      marginRight: "auto",
+      borderColor: "lightblue",
+      borderWidth: "12px",
+      borderStyle: "dotted",
+      padding: "60px 20px",
+      textAlign: "center"
+    }
+  });
+
+type Props = WithStyles<typeof styles>;
+
+export default withStyles(styles)(ReceiptNew);
