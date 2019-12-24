@@ -152,8 +152,16 @@ const ReceiptNew: React.FC<Props> = props => {
 
   if (fileUrl === "") {
     return (
-      <div>
+      <div className={classes.container}>
         <h1>Upload a file</h1>
+        <p>
+          To start submitting a new receipt, please upload a picture of the
+          receipt.
+        </p>
+        <p>
+          A photo or a scan (as an image) will work great. Unfortunately{" "}
+          <strong>PDFs are not supported</strong> (yet), only images.
+        </p>
         <div {...getRootProps()} className={classes.uploader}>
           <input {...getInputProps()} />
           <p>Drag and drop a file here, or click to select a file.</p>
@@ -282,7 +290,9 @@ const styles = (theme: Theme) =>
   createStyles({
     container: {
       maxWidth: "450px",
-      paddingBottom: "80px"
+      paddingBottom: "80px",
+      marginLeft: "auto",
+      marginRight: "auto"
     },
     title: {
       flexGrow: 1
@@ -294,7 +304,8 @@ const styles = (theme: Theme) =>
       textAlign: "center"
     },
     uploader: {
-      width: "80%",
+      width: "90%",
+      marginTop: "30px",
       marginLeft: "auto",
       marginRight: "auto",
       borderColor: "lightblue",
