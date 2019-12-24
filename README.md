@@ -31,3 +31,7 @@ The stack can be deployed with the following services:
   - Should fit comfortably within their free dyno limit
 * [Netlify](https://www.netlify.com/) for the static frontend
   - Netlify offers free static site hosting and will build from GitHub automatically
+
+## User Testing
+
+* Erin Jeavons-Fellows - Chief User Tester (President)
