@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "start": "hasura console"
+    "start": "env-cmd -f ../.env --use-shell \"hasura console --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET\""
   },
   "devDependencies": {
+    "env-cmd": "^10.0.1",
     "hasura-cli": "^1.0.0"
   }
 }
