@@ -32,6 +32,48 @@ The stack can be deployed with the following services:
 * [Netlify](https://www.netlify.com/) for the static frontend
   - Netlify offers free static site hosting and will build from GitHub automatically
 
+## Development
+
+To run this locally in development you need the following installed:
+
+* [nodejs](https://nodejs.org/)
+* [yarn](https://www.yarnpkg.com/)
+* [docker](https://www.docker.com)
+  - Including `docker-compose`
+
+You'll need mulitple terminals to run all the pieces. More info below.
+
+### Config
+
+To run the app in development, you'll need some config values. They're included in this repo in `.env` at the root. However, to standardise on this, we're planning to copy the config setup from [here](https://github.com/chmac/community-shift-signup). See https://github.com/chmac/community-expenses-submission/issues/4.
+
+### Data backend
+
+Hasura requires 2 terminals. Firstly, to run the Hasura engine:
+
+* `cd hasura`
+* `docker-compose up`
+  - This starts the Hasura engine via docker
+  
+Now in a second terminal:
+
+* `cd hasura`
+* `yarn`
+* `yarn start`
+  - This starts the Hasura console
+
+### Media server
+
+* `cd media-server`
+* `yarn`
+* `yarn start`
+
+### Frontend
+
+* `cd frontend`
+* `yarn`
+* `yarn start`
+
 ## User Testing
 
 * Erin Jeavons-Fellows - Chief User Tester (President)
