@@ -5,6 +5,7 @@ import { buildASTSchema } from "graphql";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GraphQLBridge } from "uniforms-bridge-graphql";
 import axios from "axios";
+import dayjs from "dayjs";
 import {
   AutoForm,
   AutoField,
@@ -183,7 +184,12 @@ const ReceiptNew: React.FC<Props> = props => {
       <AuthImage file_url={fileUrl} />
       <AutoForm
         schema={bridge}
-        model={{ includes_personal_info: true, pay_to_iban, pay_to_name }}
+        model={{
+          date: dayjs().format("YYYY-MM-DD"),
+          includes_personal_info: true,
+          pay_to_iban,
+          pay_to_name
+        }}
         onSubmit={async (model: ReceiptModel) => {
           const { amount, includes_personal_info, ...object } = model;
           const amount_cents = Math.round(amount * 100);
