@@ -59,6 +59,12 @@ const formSchemaExtras = {
   },
   amount: {
     label: "Amount of this receipt in EUR"
+  },
+  pay_to_name: { label: "Repayment Name" },
+  pay_to_iban: { label: "Repayment to IBAN" },
+  pay_to_notes: {
+    label: "Any extra information for repayment",
+    multiline: true
   }
 };
 
