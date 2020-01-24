@@ -79,6 +79,21 @@ Now in a second terminal:
 * `yarn`
 * `yarn start`
 
+## Demo
+
+You can login with email `admin@mailinator.com` and password `pass123!`.
+
+Or if you create our own Auth0 setup, for admin users, set their app_metadata to:
+
+```json
+{
+  "roles": [
+    "user",
+    "admin"
+  ]
+}
+```
+
 ## User Testing
 
 * Erin Jeavons-Fellows - Chief User Tester (President)
