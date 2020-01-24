@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "migrate": "env-cmd -f ../.env --use-shell \"hasura migrate --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET\"",
     "start": "env-cmd -f ../.env --use-shell \"hasura console --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET\""
   },
   "devDependencies": {
