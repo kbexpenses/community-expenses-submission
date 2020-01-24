@@ -1,5 +1,6 @@
 # community-expenses-submission
-Experiments towards a simple tool to support community projects that handle submission of expenses from participants.
+
+Community projects often handle reimbursement of expenses. This process can be labour intensive. The goal of this software is to make this process easier, and allow more people to share the work. We're inspired by the [opencollective](https://opencollective.com/) system.
 
 ## Stack
 
