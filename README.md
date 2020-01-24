@@ -60,6 +60,10 @@ Now in a second terminal:
 
 * `cd hasura`
 * `yarn`
+* `yarn run migrate status`
+  - This will tell you the hasura console migration status
+* `yarn run migrate apply`
+  - This will ensure you are running the latest migrations
 * `yarn start`
   - This starts the Hasura console
 
