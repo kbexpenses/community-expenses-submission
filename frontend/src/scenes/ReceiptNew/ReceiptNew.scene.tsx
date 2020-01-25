@@ -28,10 +28,12 @@ import { withStyles, Theme, createStyles, WithStyles } from "@material-ui/core";
 export type ReceiptModel = {
   amount: number;
   date: string;
-  budget_allocations: {
+  multiple_categories: boolean;
+  budget_allocations?: {
     budget_category: string;
     amount: number;
   }[];
+  budget_category?: string;
   includes_personal_info: boolean;
   pay_to_name: string;
   pay_to_iban: string;
@@ -46,7 +48,9 @@ const formSchema = gql`
   type Receipt {
     amount: Float
     date: String
+    multiple_categories: Boolean
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
+    budget_category: String
     includes_personal_info: Boolean
     pay_to_name: String
     pay_to_iban: String
@@ -192,10 +196,19 @@ const ReceiptNew: React.FC<Props> = props => {
           pay_to_name
         }}
         onSubmit={async (model: ReceiptModel) => {
-          const { amount, includes_personal_info, ...object } = model;
+          const { amount, includes_personal_info, budget_category, ...object } = model;
           const amount_cents = Math.round(amount * 100);
 
-          const budget_allocations = model.budget_allocations.map(
+          const single_budget_allocation = [{
+            budget_category: budget_category,
+            amount: amount,
+          }];
+
+          const budget_allocation = model.budget_allocations ?
+            model.budget_allocations : 
+            single_budget_allocation;
+
+          const budget_allocations = budget_allocation.map(
             budget_allocation => {
               const budget_category = budget_categories.find(
                 b => b.name === budget_allocation.budget_category
@@ -208,7 +221,7 @@ const ReceiptNew: React.FC<Props> = props => {
               // an amount, then copy the amount from the receipt, assuming the
               // entire value is assigned to this category.
               const allocation_amount_cents =
-                model.budget_allocations.length === 1 &&
+                !model.budget_allocations &&
                 !budget_allocation.amount
                   ? amount_cents
                   : Math.round(budget_allocation.amount * 100);
@@ -257,15 +270,11 @@ const ReceiptNew: React.FC<Props> = props => {
         <p>Which project category is this receipt being charged to?</p>
 
         {!multipleCategories ? (
-          <ListField name="budget_allocations" initialCount={1} label={false} addIcon={false}>
-            <NestField name="$">
               <SelectField
                 name="budget_category"
                 label="Budget category"
                 allowedValues={budget_categories_names}
               />
-            </NestField>
-          </ListField>
         ) : (
           <ListField name="budget_allocations" initialCount={1} label={false}>
             <NestField name="$">
@@ -285,8 +294,8 @@ const ReceiptNew: React.FC<Props> = props => {
         
 
         <div>
-          <input 
-            type="checkbox" 
+          <AutoField
+            name="multiple_categories"
             checked={multipleCategories} 
             onChange={() => setMultipleCategories(a => !a)} 
           />

@@ -1,7 +1,7 @@
 import { ReceiptModel } from "./ReceiptNew.scene";
 
 export const formSchemaValidator = (model: ReceiptModel) => {
-  const { date, amount, pay_to_iban, pay_to_notes, budget_allocations } = model;
+  const { date, amount, pay_to_iban, pay_to_notes, budget_allocations, multiple_categories, budget_category } = model;
   const details = [];
 
   if (!amount) {
@@ -24,18 +24,19 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     });
   }
   if (
-    budget_allocations.length === 0 ||
-    !budget_allocations[0].budget_category
+    (multiple_categories && budget_allocations && (budget_allocations.length === 0 || !budget_allocations[0].budget_category)) ||
+    (!multiple_categories && !budget_category)
   ) {
     details.push({
       name: "budget_allocations.0.budget_category",
       message: "Please allocate this receipt to at least 1 budget category."
     });
   }
-  const total_allocations = budget_allocations.reduce(
-    (a, b) => a + b.amount,
-    0
-  );
+  const total_allocations = budget_allocations ?
+    budget_allocations.reduce(
+      (a, b) => a + b.amount,
+      0
+    ) : amount;
   if (total_allocations > amount) {
     details.push({
       name: "budget_allocations.0.amount",
