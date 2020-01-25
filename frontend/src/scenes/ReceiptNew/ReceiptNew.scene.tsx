@@ -104,6 +104,7 @@ const ReceiptNew: React.FC<Props> = props => {
   const { classes } = props;
 
   const [fileUrl, setFileUrl] = useState("");
+  const [multipleCategories,  setMultipleCategories] = useState(false) 
 
   const history = useHistory();
 
@@ -254,20 +255,43 @@ const ReceiptNew: React.FC<Props> = props => {
 
         <h3>Categories</h3>
         <p>Which project category is this receipt being charged to?</p>
-        <ListField name="budget_allocations" initialCount={1} label={false}>
-          <NestField name="$">
-            <SelectField
-              name="budget_category"
-              label="Budget category"
-              allowedValues={budget_categories_names}
-            />
-            <AutoField
-              name="amount"
-              label="Amount in EUR (or leave blank if only 1 category)"
-            />
-            <ListDelField name="" />
-          </NestField>
-        </ListField>
+
+        {!multipleCategories ? (
+          <ListField name="budget_allocations" initialCount={1} label={false} addIcon={false}>
+            <NestField name="$">
+              <SelectField
+                name="budget_category"
+                label="Budget category"
+                allowedValues={budget_categories_names}
+              />
+            </NestField>
+          </ListField>
+        ) : (
+          <ListField name="budget_allocations" initialCount={1} label={false}>
+            <NestField name="$">
+              <SelectField
+                name="budget_category"
+                label="Budget category"
+                allowedValues={budget_categories_names}
+              />
+              <AutoField
+                name="amount"
+                label="Amount in EUR (or leave blank if only 1 category)"
+              />
+              <ListDelField name="" />
+            </NestField>
+          </ListField>
+        )}
+        
+
+        <div>
+          <input 
+            type="checkbox" 
+            checked={multipleCategories} 
+            onChange={() => setMultipleCategories(a => !a)} 
+          />
+          Select this if you need more than one category
+        </div>
 
         <h3>Personal information</h3>
         <p>
