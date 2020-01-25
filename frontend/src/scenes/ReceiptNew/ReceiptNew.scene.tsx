@@ -116,7 +116,8 @@ const ReceiptNew: React.FC<Props> = props => {
   >(NewReceiptQuery, {
     variables: {
       user_id: getUserId()
-    }
+    },
+    fetchPolicy: "cache-and-network"
   });
   const [insertReceipt] = useMutation(NewReceiptMutation);
 
