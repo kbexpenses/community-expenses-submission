@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { getToken } from "../services/auth/auth.service";
 
+export const MEDIA_URL =
+  process.env.REACT_APP_MEDIA_SERVER_URL || "http://localhost:4000";
+
 type Props = {
   file_url: string;
 };
@@ -17,7 +20,7 @@ const AuthImage = (props: Props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000${file_url}`, {
+      .get(`${MEDIA_URL}${file_url}`, {
         responseType: "arraybuffer",
         headers: {
           Authorization: `Bearer ${getToken()}`
