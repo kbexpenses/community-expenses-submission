@@ -1,7 +1,7 @@
 import { ReceiptModel } from "./ReceiptNew.scene";
 
 export const formSchemaValidator = (model: ReceiptModel) => {
-  const { date, amount, pay_to_iban, pay_to_notes, budget_allocations, multiple_categories, budget_category } = model;
+  const { date, amount, pay_to_iban, pay_to_notes, budget_allocations, budget_category } = model;
   const details = [];
 
   if (!amount) {
@@ -24,8 +24,8 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     });
   }
   if (
-    (multiple_categories && budget_allocations && (budget_allocations.length === 0 || !budget_allocations[0].budget_category)) ||
-    (!multiple_categories && !budget_category)
+    (budget_allocations && (budget_allocations.length === 0 || !budget_allocations[0].budget_category)) ||
+    (!budget_allocations && !budget_category)
   ) {
     details.push({
       name: "budget_allocations.0.budget_category",

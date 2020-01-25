@@ -269,6 +269,15 @@ const ReceiptNew: React.FC<Props> = props => {
         <h3>Categories</h3>
         <p>Which project category is this receipt being charged to?</p>
 
+        <div>
+          <AutoField
+            name="multiple_categories"
+            checked={multipleCategories} 
+            onChange={() => setMultipleCategories(a => !a)} 
+          />
+          Select this if you need more than one category
+        </div>
+
         {!multipleCategories ? (
               <SelectField
                 name="budget_category"
@@ -276,7 +285,7 @@ const ReceiptNew: React.FC<Props> = props => {
                 allowedValues={budget_categories_names}
               />
         ) : (
-          <ListField name="budget_allocations" initialCount={1} label={false}>
+          <ListField name="budget_allocations" initialCount={2} label={false}>
             <NestField name="$">
               <SelectField
                 name="budget_category"
@@ -292,16 +301,6 @@ const ReceiptNew: React.FC<Props> = props => {
           </ListField>
         )}
         
-
-        <div>
-          <AutoField
-            name="multiple_categories"
-            checked={multipleCategories} 
-            onChange={() => setMultipleCategories(a => !a)} 
-          />
-          Select this if you need more than one category
-        </div>
-
         <h3>Personal information</h3>
         <p>
           If this receipt does not contain the name and address of any
