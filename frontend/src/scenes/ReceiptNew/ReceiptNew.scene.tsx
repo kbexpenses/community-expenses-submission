@@ -191,6 +191,9 @@ const ReceiptNew: React.FC<Props> = props => {
           pay_to_name
         }}
         onSubmit={async (model: ReceiptModel) => {
+          if (!window.confirm('Once a receipt is submitted it can NOT be edited, please make sure that the information you entered is complete and correct')) {
+            return false;
+          }
           const { amount, includes_personal_info, ...object } = model;
           const amount_cents = Math.round(amount * 100);
 
