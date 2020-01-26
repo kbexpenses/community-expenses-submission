@@ -71,7 +71,10 @@ const SetProfileMutation = gql`
   }
 `;
 
-const Profile : React.FC<{promptUser: boolean, onSubmit: Function}> = props => {
+const Profile: React.FC<{
+  promptUser: boolean;
+  onSubmit: Function;
+}> = props => {
   const { loading, error, data } = useQuery(ProfileQuery);
   const [setProfile] = useMutation(SetProfileMutation);
 
@@ -92,7 +95,9 @@ const Profile : React.FC<{promptUser: boolean, onSubmit: Function}> = props => {
 
   const [profile] = data.user_profiles;
 
-  const userPrompt = <div>Please create a user profile in order to add receipts</div>
+  const userPrompt = (
+    <div>Please create a user profile in order to add receipts</div>
+  );
 
   return (
     <div>

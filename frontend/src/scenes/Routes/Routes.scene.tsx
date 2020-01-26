@@ -43,21 +43,20 @@ const Routes = (props: Props) => {
         <CssBaseline />
         <Container>
           {isLoggedIn ? (
-              hasProfile ? (
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/profile" component={Profile} />
-                    <Route exact path="/receipts" component={ReceiptIndex} />
-                    <Route exact path="/receipts/new" component={ReceiptNew} />
-                    <Route exact path="/receipts/admin" component={ReceiptAdmin} />
-                    <Route exact path="/receipts/:id" component={ReceiptSingle} />
-                    <Route exact path="/budget" component={BudgetIndex} />
-                </Switch>
-              ) : (
-                  // If user hasn't created a profile, force them to
-                    <Profile promptUser={true} onSubmit={refetch} />
-              )
-                
+            hasProfile ? (
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/profile" component={Profile} />
+                <Route exact path="/receipts" component={ReceiptIndex} />
+                <Route exact path="/receipts/new" component={ReceiptNew} />
+                <Route exact path="/receipts/admin" component={ReceiptAdmin} />
+                <Route exact path="/receipts/:id" component={ReceiptSingle} />
+                <Route exact path="/budget" component={BudgetIndex} />
+              </Switch>
+            ) : (
+              // If user hasn't created a profile, force them to
+              <Profile promptUser={true} onSubmit={refetch} />
+            )
           ) : (
             <>
               {/* <Redirect to="/" /> */}
