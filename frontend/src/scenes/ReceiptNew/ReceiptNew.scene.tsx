@@ -108,7 +108,7 @@ const ReceiptNew: React.FC<Props> = props => {
   const { classes } = props;
 
   const [fileUrl, setFileUrl] = useState("");
-  const [multipleCategories,  setMultipleCategories] = useState(false) 
+  const [multipleCategories, setMultipleCategories] = useState(false);
 
   const history = useHistory();
 
@@ -197,17 +197,32 @@ const ReceiptNew: React.FC<Props> = props => {
           pay_to_name
         }}
         onSubmit={async (model: ReceiptModel) => {
-          const { amount, includes_personal_info, budget_category, ...object } = model;
+          if (
+            !window.confirm(
+              "Once a receipt is submitted it can NOT be edited, please make sure that the information you entered is complete and correct"
+            )
+          ) {
+            return false;
+          }
+
+          const {
+            amount,
+            includes_personal_info,
+            budget_category,
+            ...object
+          } = model;
           const amount_cents = Math.round(amount * 100);
 
-          const single_budget_allocation = [{
-            budget_category: budget_category,
-            amount: amount,
-          }];
+          const single_budget_allocation = [
+            {
+              budget_category: budget_category,
+              amount: amount
+            }
+          ];
 
-          const budget_allocation = model.budget_allocations ?
-            model.budget_allocations : 
-            single_budget_allocation;
+          const budget_allocation = model.budget_allocations
+            ? model.budget_allocations
+            : single_budget_allocation;
 
           const budget_allocations = budget_allocation.map(
             budget_allocation => {
@@ -222,8 +237,7 @@ const ReceiptNew: React.FC<Props> = props => {
               // an amount, then copy the amount from the receipt, assuming the
               // entire value is assigned to this category.
               const allocation_amount_cents =
-                !model.budget_allocations &&
-                !budget_allocation.amount
+                !model.budget_allocations && !budget_allocation.amount
                   ? amount_cents
                   : Math.round(budget_allocation.amount * 100);
 
@@ -273,18 +287,18 @@ const ReceiptNew: React.FC<Props> = props => {
         <div>
           <AutoField
             name="multiple_categories"
-            checked={multipleCategories} 
-            onChange={() => setMultipleCategories(a => !a)} 
+            checked={multipleCategories}
+            onChange={() => setMultipleCategories(a => !a)}
           />
           Select this if you need more than one category
         </div>
 
         {!multipleCategories ? (
-              <SelectField
-                name="budget_category"
-                label="Budget category"
-                allowedValues={budget_categories_names}
-              />
+          <SelectField
+            name="budget_category"
+            label="Budget category"
+            allowedValues={budget_categories_names}
+          />
         ) : (
           <ListField name="budget_allocations" initialCount={2} label={false}>
             <NestField name="$">
@@ -301,7 +315,7 @@ const ReceiptNew: React.FC<Props> = props => {
             </NestField>
           </ListField>
         )}
-        
+
         <h3>Personal information</h3>
         <p>
           If this receipt does not contain the name and address of any
