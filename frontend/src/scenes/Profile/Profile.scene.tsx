@@ -73,7 +73,7 @@ const SetProfileMutation = gql`
 
 const Profile: React.FC<{
   promptUser: boolean;
-  onSubmit: Function;
+  onSubmit: () => void;
 }> = props => {
   const { loading, error, data } = useQuery(ProfileQuery);
   const [setProfile] = useMutation(SetProfileMutation);
