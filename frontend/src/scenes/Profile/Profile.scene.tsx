@@ -37,7 +37,7 @@ const formSchemaValidator = (model: ProfileModel) => {
 
 const bridge = new GraphQLBridge(formSchemaType, formSchemaValidator);
 
-const ProfileQuery = gql`
+export const ProfileQuery = gql`
   query Profile {
     user_profiles {
       id
@@ -71,7 +71,10 @@ const SetProfileMutation = gql`
   }
 `;
 
-const Profile = () => {
+const Profile: React.FC<{
+  promptUser: boolean;
+  onSubmit: () => void;
+}> = props => {
   const { loading, error, data } = useQuery(ProfileQuery);
   const [setProfile] = useMutation(SetProfileMutation);
 
@@ -92,8 +95,13 @@ const Profile = () => {
 
   const [profile] = data.user_profiles;
 
+  const userPrompt = (
+    <div>Please create a user profile in order to add receipts</div>
+  );
+
   return (
     <div>
+      {props.promptUser && userPrompt}
       <h1>Profile</h1>
       <AutoForm
         schema={bridge}
@@ -112,6 +120,7 @@ const Profile = () => {
               }
             });
             alert("Profile successfully updated.");
+            props.onSubmit();
           } catch (error) {
             alert(`Error #NL7KW3: ${error.message}`);
           }

@@ -18,7 +18,8 @@ import { AppState } from "../../store";
 
 import Bar from "../Bar/Bar.scene";
 import Home from "../Home/Home.scene";
-import Profile from "../Profile/Profile.scene";
+import Profile, { ProfileQuery } from "../Profile/Profile.scene";
+import { useQuery } from "@apollo/react-hooks";
 import ReceiptIndex from "../ReceiptIndex/ReceiptIndex.scene";
 import ReceiptNew from "../ReceiptNew/ReceiptNew.scene";
 import ReceiptAdmin from "../ReceiptsAdmin/ReceiptsAdmin.scene";
@@ -32,6 +33,8 @@ export const history = createBrowserHistory();
 
 const Routes = (props: Props) => {
   const { isLoggedIn } = props;
+  const { data, refetch } = useQuery(ProfileQuery);
+  const hasProfile = data ? data.user_profiles.length : false;
 
   return (
     <ThemeProvider theme={theme}>
@@ -40,15 +43,20 @@ const Routes = (props: Props) => {
         <CssBaseline />
         <Container>
           {isLoggedIn ? (
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/profile" component={Profile} />
-              <Route exact path="/receipts" component={ReceiptIndex} />
-              <Route exact path="/receipts/new" component={ReceiptNew} />
-              <Route exact path="/receipts/admin" component={ReceiptAdmin} />
-              <Route exact path="/receipts/:id" component={ReceiptSingle} />
-              <Route exact path="/budget" component={BudgetIndex} />
-            </Switch>
+            hasProfile ? (
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/profile" component={Profile} />
+                <Route exact path="/receipts" component={ReceiptIndex} />
+                <Route exact path="/receipts/new" component={ReceiptNew} />
+                <Route exact path="/receipts/admin" component={ReceiptAdmin} />
+                <Route exact path="/receipts/:id" component={ReceiptSingle} />
+                <Route exact path="/budget" component={BudgetIndex} />
+              </Switch>
+            ) : (
+              // If user hasn't created a profile, force them to
+              <Profile promptUser={true} onSubmit={refetch} />
+            )
           ) : (
             <>
               {/* <Redirect to="/" /> */}
