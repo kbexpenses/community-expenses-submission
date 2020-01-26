@@ -8,26 +8,42 @@ const ReceiptSingleQuery = gql`
   query ReceiptSingleQuery($id: uuid!) {
     receipts_by_pk(id: $id) {
       id
+      user_id
       number
       date
       file_url
       amount_cents
       pay_to_name
       pay_to_iban
-      user_id
+      budget_allocations {
+        id
+        amount_cents
+        budget_category {
+          id
+          name
+        }
+      }
     }
   }
 `;
 
 type ReceiptReturn = {
   id: string;
+  user_id: string;
   number: number;
   date: string;
   file_url: string;
   amount_cents: number;
   pay_to_name: string;
   pay_to_iban: string;
-  user_id: string;
+  budget_allocations?: {
+    id: string;
+    amount_cents: number;
+    budget_category: {
+      id: string;
+      name: string;
+    };
+  }[];
 };
 
 const ReceiptSingle = (props: Props) => {
@@ -71,6 +87,17 @@ const ReceiptSingle = (props: Props) => {
       <p>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</p>
       <p>Pay to Name: {receipt.pay_to_name}</p>
       <p>Pay to IBAN: {receipt.pay_to_iban}</p>
+      <p>Categories</p>
+      <ul>
+        {receipt?.budget_allocations?.map(allocation => {
+          return (
+            <li key={allocation.id}>
+              {allocation.budget_category.name} (€
+              {(allocation.amount_cents / 100).toFixed(2)})
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
