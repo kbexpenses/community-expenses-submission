@@ -28,10 +28,12 @@ import AuthImage, { MEDIA_URL } from "../../components/AuthImage";
 export type ReceiptModel = {
   amount: number;
   date: string;
-  budget_allocations: {
+  multiple_categories: boolean;
+  budget_allocations?: {
     budget_category: string;
     amount: number;
   }[];
+  budget_category?: string;
   includes_personal_info: boolean;
   pay_to_name: string;
   pay_to_iban: string;
@@ -46,7 +48,9 @@ const formSchema = gql`
   type Receipt {
     amount: Float
     date: String
+    multiple_categories: Boolean
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
+    budget_category: String
     includes_personal_info: Boolean
     pay_to_name: String
     pay_to_iban: String
@@ -104,6 +108,7 @@ const ReceiptNew: React.FC<Props> = props => {
   const { classes } = props;
 
   const [fileUrl, setFileUrl] = useState("");
+  const [multipleCategories,  setMultipleCategories] = useState(false) 
 
   const history = useHistory();
 
@@ -192,10 +197,19 @@ const ReceiptNew: React.FC<Props> = props => {
           pay_to_name
         }}
         onSubmit={async (model: ReceiptModel) => {
-          const { amount, includes_personal_info, ...object } = model;
+          const { amount, includes_personal_info, budget_category, ...object } = model;
           const amount_cents = Math.round(amount * 100);
 
-          const budget_allocations = model.budget_allocations.map(
+          const single_budget_allocation = [{
+            budget_category: budget_category,
+            amount: amount,
+          }];
+
+          const budget_allocation = model.budget_allocations ?
+            model.budget_allocations : 
+            single_budget_allocation;
+
+          const budget_allocations = budget_allocation.map(
             budget_allocation => {
               const budget_category = budget_categories.find(
                 b => b.name === budget_allocation.budget_category
@@ -208,7 +222,7 @@ const ReceiptNew: React.FC<Props> = props => {
               // an amount, then copy the amount from the receipt, assuming the
               // entire value is assigned to this category.
               const allocation_amount_cents =
-                model.budget_allocations.length === 1 &&
+                !model.budget_allocations &&
                 !budget_allocation.amount
                   ? amount_cents
                   : Math.round(budget_allocation.amount * 100);
@@ -255,21 +269,39 @@ const ReceiptNew: React.FC<Props> = props => {
 
         <h3>Categories</h3>
         <p>Which project category is this receipt being charged to?</p>
-        <ListField name="budget_allocations" initialCount={1} label={false}>
-          <NestField name="$">
-            <SelectField
-              name="budget_category"
-              label="Budget category"
-              allowedValues={budget_categories_names}
-            />
-            <AutoField
-              name="amount"
-              label="Amount in EUR (or leave blank if only 1 category)"
-            />
-            <ListDelField name="" />
-          </NestField>
-        </ListField>
 
+        <div>
+          <AutoField
+            name="multiple_categories"
+            checked={multipleCategories} 
+            onChange={() => setMultipleCategories(a => !a)} 
+          />
+          Select this if you need more than one category
+        </div>
+
+        {!multipleCategories ? (
+              <SelectField
+                name="budget_category"
+                label="Budget category"
+                allowedValues={budget_categories_names}
+              />
+        ) : (
+          <ListField name="budget_allocations" initialCount={2} label={false}>
+            <NestField name="$">
+              <SelectField
+                name="budget_category"
+                label="Budget category"
+                allowedValues={budget_categories_names}
+              />
+              <AutoField
+                name="amount"
+                label="Amount in EUR (or leave blank if only 1 category)"
+              />
+              <ListDelField name="" />
+            </NestField>
+          </ListField>
+        )}
+        
         <h3>Personal information</h3>
         <p>
           If this receipt does not contain the name and address of any
