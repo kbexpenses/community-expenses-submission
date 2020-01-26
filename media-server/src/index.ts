@@ -54,7 +54,6 @@ app.use(async (ctx, next) => {
   if (ctx.method !== "POST") {
     return await next();
   }
-
   const { userId } = ctx.state;
 
   // If we do not have exactly 1 file, return 500
@@ -63,13 +62,16 @@ app.use(async (ctx, next) => {
     ctx.throw(500, "Failed to upload a file #WkdnEy");
   }
 
+  if (!fs.existsSync(path.join(MEDIA_PATH))) {
+    fs.mkdirSync(path.join(MEDIA_PATH))
+  }
+
   const fileId = uuid();
   const newFileName = `${userId}__${fileId}`;
   const file = ctx.request.files.file;
   const reader = fs.createReadStream(file.path);
   const writer = fs.createWriteStream(path.join(MEDIA_PATH, newFileName));
   reader.pipe(writer);
-
   ctx.body = JSON.stringify({ fileUrl: `/${userId}/${fileId}` });
 });
 

@@ -134,6 +134,14 @@ const ReceiptNew: React.FC<Props> = props => {
         })
         .then(response => {
           setFileUrl(response.data.fileUrl);
+        })
+        .catch(error => { 
+          if (error.message === 'Network Error') {
+            // app will not continue, no further action required
+            window.alert('It appears the file server is down, if this problem replicates please let us know.')
+          } else {
+            window.alert('An unknown error occured, please try again.')
+          }
         });
     }
   });
