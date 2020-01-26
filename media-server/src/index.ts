@@ -62,20 +62,34 @@ app.use(async (ctx, next) => {
     ctx.throw(500, "Failed to upload a file #WkdnEy");
   }
 
-  if (!fs.existsSync(path.join(MEDIA_PATH))) {
-    fs.mkdirSync(path.join(MEDIA_PATH))
-  }
-
   const fileId = uuid();
   const newFileName = `${userId}__${fileId}`;
   const file = ctx.request.files.file;
   const reader = fs.createReadStream(file.path);
   const writer = fs.createWriteStream(path.join(MEDIA_PATH, newFileName));
-  reader.pipe(writer);
-  ctx.body = JSON.stringify({ fileUrl: `/${userId}/${fileId}` });
+  ctx.body = JSON.stringify({ fileUrl: `/${userId}/${fileId}` })
+  const stream = reader.pipe(writer)
+  // TODO app still crashes when the stream runs into an error, but it does not return a 200 anymore
+  await new Promise(function(resolve, reject) {
+    reader.on('end', () => {
+      // TODO what if reading succeeds, but writing/closing fails? 
+      // writer.on('end') is never emitted
+      ctx.body = JSON.stringify({ fileUrl: `/${userId}/${fileId}` })
+      resolve()
+    });
+    writer.on('error', () => {
+      ctx.throw(500, 'Error writing file to destination');
+      reject()
+    });
+    reader.on('error', () => {
+      ctx.throw(500, 'Error writing file to destination');
+      reject()
+    });
+  });
 });
 
 app.use(async (ctx, next) => {
+  console.log('test')
   const { userId, roles } = ctx.state;
 
   const [_, fileUserId, fileName] = ctx.path.split("/");
