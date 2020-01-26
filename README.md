@@ -67,6 +67,13 @@ Now in a second terminal:
 * `yarn start`
   - This starts the Hasura console
 
+Then you need to add some data to be able to use the app. As a minimum:
+
+* Insert 2 budget categories
+  - http://localhost:9695/data/schema/public/tables/budget_categories/insert
+  - Pick any name you like
+  - Enter a budget amount in cents (so `20000` = €200)
+
 ### Media server
 
 * `cd media-server`

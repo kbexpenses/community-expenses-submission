@@ -15,14 +15,14 @@ import {
   SelectField,
   ListDelField
 } from "uniforms-material";
+import { withStyles, Theme, createStyles, WithStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 import { formSchemaValidator } from "./ReceiptNew.helpers";
 import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
-import AuthImage from "../../components/AuthImage";
-import { useHistory } from "react-router-dom";
-import { withStyles, Theme, createStyles, WithStyles } from "@material-ui/core";
+import AuthImage, { MEDIA_URL } from "../../components/AuthImage";
 
 // This tracks what is entered in the form
 export type ReceiptModel = {
@@ -121,7 +121,8 @@ const ReceiptNew: React.FC<Props> = props => {
   >(NewReceiptQuery, {
     variables: {
       user_id: getUserId()
-    }
+    },
+    fetchPolicy: "cache-and-network"
   });
   const [insertReceipt] = useMutation(NewReceiptMutation);
 
@@ -132,7 +133,7 @@ const ReceiptNew: React.FC<Props> = props => {
       const data = new FormData();
       data.append("file", files[0]);
       axios
-        .post("http://localhost:4000", data, {
+        .post(MEDIA_URL, data, {
           headers: {
             Authorization: `Bearer ${getToken()}`
           }
