@@ -68,7 +68,8 @@ const formSchema = gql`
 const formSchemaType = buildASTSchema(formSchema).getType("Receipt");
 const formSchemaExtras = {
   date: {
-    type: "Date"
+    type: "Date",
+    label: "Date of receipt"
   },
   amount: {
     label: "Amount of this receipt in EUR"
