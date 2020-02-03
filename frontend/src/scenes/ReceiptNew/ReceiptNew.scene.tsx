@@ -189,7 +189,11 @@ const ReceiptNew: React.FC<Props> = props => {
       <h1>Enter receipt info</h1>
       <AuthImage file_url={fileUrl} />
       <AutoForm
-        schema={bridge}
+        schema={bridge} 
+        modelTransform={(mode: object, model: object) => ({
+          ...model,
+          multiple_categories: multipleCategories,
+        })}
         model={{
           date: dayjs().format("YYYY-MM-DD"),
           includes_personal_info: true,
@@ -209,19 +213,19 @@ const ReceiptNew: React.FC<Props> = props => {
             amount,
             includes_personal_info,
             budget_category,
+            multiple_categories,
             ...object
           } = model;
           const amount_cents = Math.round(amount * 100);
-
           const single_budget_allocation = [
             {
-              budget_category: budget_category,
-              amount: amount
+              budget_category,
+              amount,
             }
           ];
 
-          const budget_allocation = model.budget_allocations
-            ? model.budget_allocations
+          const budget_allocation = multiple_categories 
+            ? (model.budget_allocations || [])
             : single_budget_allocation;
 
           const budget_allocations = budget_allocation.map(
@@ -237,7 +241,7 @@ const ReceiptNew: React.FC<Props> = props => {
               // an amount, then copy the amount from the receipt, assuming the
               // entire value is assigned to this category.
               const allocation_amount_cents =
-                !model.budget_allocations && !budget_allocation.amount
+                !budget_allocation.amount
                   ? amount_cents
                   : Math.round(budget_allocation.amount * 100);
 
