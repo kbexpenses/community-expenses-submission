@@ -32,59 +32,52 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     });
   }
 
-  // Selected more than 1 category & failed to enter a budget category
-  const budgetAllocationsCategoryErrorIndex =
-    (budget_allocations &&
-      budget_allocations.findIndex(
-        allocation => !allocation.budget_category
-      )) ||
-    0;
-  if (
-    multiple_categories &&
-    budget_allocations &&
-    (budget_allocations.length === 0 ||
-      budgetAllocationsCategoryErrorIndex > -1)
-  ) {
-    details.push({
-      name: `budget_allocations.${budgetAllocationsCategoryErrorIndex}.budget_category`,
-      message: "Please select a budget category."
-    });
-  }
+  if (multiple_categories) {
+    if (
+      typeof budget_allocations !== "object" ||
+      budget_allocations.length === 0
+    ) {
+      details.push({
+        name: "multiple_categories",
+        message: "Please enter at least 1 budget category"
+      });
+    } else {
+      const total_allocations = budget_allocations.reduce(
+        (a, b) => a + b.amount,
+        0
+      );
 
-  if (!multiple_categories && !budget_category) {
-    details.push({
-      name: "budget_category",
-      message: "Please allocate this receipt to at least 1 budget category."
-    });
-  }
+      budget_allocations?.forEach((budget_allocation, i) => {
+        const { amount, budget_category } = budget_allocation;
+        if (!amount || amount === 0) {
+          details.push({
+            name: `budget_allocations.${i}.amount`,
+            message: "Please enter an amount for this budget category"
+          });
+        }
 
-  // Selected more than 1 category & failed to enter an amount
-  const budgetAmountErrorIndex =
-    (budget_allocations &&
-      budget_allocations.findIndex(allocation => !allocation.amount)) ||
-    0;
-  if (
-    multiple_categories &&
-    budget_allocations &&
-    budget_allocations.length > 1 &&
-    budgetAmountErrorIndex > -1
-  ) {
-    details.push({
-      name: `budget_allocations.${budgetAmountErrorIndex}.amount`,
-      message: "Please allocate an amount for each budget category"
-    });
-  }
+        if (!budget_category) {
+          details.push({
+            name: `budget_allocations.${i}.budget_category`,
+            message: "Please select a budget category"
+          });
+        }
 
-  // Amounts of multiple budget categories add up to more than the total amount
-  const total_allocations =
-    multiple_categories && budget_allocations
-      ? budget_allocations.reduce((a, b) => a + b.amount, 0)
-      : amount;
-  if (total_allocations > amount) {
-    details.push({
-      name: "budget_allocations.0.amount",
-      message: "Please allocate less than the total receipt amount"
-    });
+        if (total_allocations > amount) {
+          details.push({
+            name: `budget_allocations.${i}.amount`,
+            message: "Please allocate less than the total receipt amount"
+          });
+        }
+      });
+    }
+  } else {
+    if (!budget_category) {
+      details.push({
+        name: "budget_category",
+        message: "Please allocate this receipt to at least 1 budget category."
+      });
+    }
   }
 
   if (details.length) {
