@@ -1,4 +1,4 @@
-import { ReceiptModel } from "./ReceiptNew.scene";
+import { ReceiptModel, BudgetCategory } from "./ReceiptNew.scene";
 
 export const formSchemaValidator = (model: ReceiptModel) => {
   const {
@@ -91,4 +91,58 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     // eslint-disable-next-line no-throw-literal
     throw { details };
   }
+};
+
+const getBudgetCategoryFactory = (budget_categories: BudgetCategory[]) => (
+  name?: string
+): BudgetCategory => {
+  const budget_category = budget_categories.find(budget_category => {
+    return name === budget_category.name;
+  });
+
+  if (!budget_category) {
+    throw new Error("Unable to find budget category ID. #9gNLUG");
+  }
+
+  return budget_category;
+};
+
+export const getBudgetAllocationsFromModel = (
+  model: ReceiptModel,
+  budget_categories: BudgetCategory[]
+) => {
+  const {
+    amount,
+    budget_category,
+    multiple_categories,
+    budget_allocations
+  } = model;
+
+  const getBudgetCategory = getBudgetCategoryFactory(budget_categories);
+
+  if (multiple_categories) {
+    const { id: budget_category_id } = getBudgetCategory(budget_category);
+    const amount_cents = Math.round(amount * 100);
+    return {
+      budget_category_id,
+      amount_cents
+    };
+  }
+
+  if (!budget_allocations) {
+    throw new Error("You must choose at least one budget category. #3aVtwL");
+  }
+
+  return budget_allocations.map(
+    (budget_allocation: { budget_category?: string; amount: number }) => {
+      const { id: budget_category_id } = getBudgetCategory(
+        budget_allocation.budget_category
+      );
+
+      return {
+        budget_category_id,
+        amount_cents: Math.round(budget_allocation.amount * 100)
+      };
+    }
+  );
 };

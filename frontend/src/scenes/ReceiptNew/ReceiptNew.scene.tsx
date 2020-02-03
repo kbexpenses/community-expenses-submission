@@ -19,7 +19,10 @@ import { withStyles, Theme, createStyles, WithStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 
-import { formSchemaValidator } from "./ReceiptNew.helpers";
+import {
+  formSchemaValidator,
+  getBudgetAllocationsFromModel
+} from "./ReceiptNew.helpers";
 import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
 import AuthImage, { MEDIA_URL } from "../../components/AuthImage";
@@ -38,6 +41,11 @@ export type ReceiptModel = {
   pay_to_name: string;
   pay_to_iban: string;
   pay_to_notes: string;
+};
+
+export type BudgetCategory = {
+  id: string;
+  name: string;
 };
 
 const formSchema = gql`
@@ -114,7 +122,7 @@ const ReceiptNew: React.FC<Props> = props => {
 
   const { loading, error, data } = useQuery<
     {
-      budget_categories: { id: string; name: string }[];
+      budget_categories: BudgetCategory[];
       user_profiles: { name: string; iban: string }[];
     },
     { user_id?: string | null }
@@ -201,54 +209,30 @@ const ReceiptNew: React.FC<Props> = props => {
           pay_to_name
         }}
         onSubmit={async (model: ReceiptModel) => {
-          if (
-            !window.confirm(
-              "Once a receipt is submitted it can NOT be edited, please make sure that the information you entered is complete and correct"
-            )
-          ) {
-            return false;
-          }
-
           const {
             amount,
             includes_personal_info,
             budget_category,
             multiple_categories,
+            budget_allocations,
             ...object
           } = model;
+
+          if (
+            !window.confirm(
+              "Once a receipt is submitted it can NOT be edited, " +
+                "please make sure that the information you entered " +
+                "is complete and correct"
+            )
+          ) {
+            return false;
+          }
+
           const amount_cents = Math.round(amount * 100);
-          const single_budget_allocation = [
-            {
-              budget_category,
-              amount
-            }
-          ];
 
-          const budget_allocation = multiple_categories
-            ? model.budget_allocations || []
-            : single_budget_allocation;
-
-          const budget_allocations = budget_allocation.map(
-            budget_allocation => {
-              const budget_category = budget_categories.find(
-                b => b.name === budget_allocation.budget_category
-              );
-              if (!budget_category) {
-                throw new Error("Unable to find budget category ID. #9gNLUG");
-              }
-
-              // If there is only a single budget category, and it does not have
-              // an amount, then copy the amount from the receipt, assuming the
-              // entire value is assigned to this category.
-              const allocation_amount_cents = !budget_allocation.amount
-                ? amount_cents
-                : Math.round(budget_allocation.amount * 100);
-
-              return {
-                budget_category_id: budget_category.id,
-                amount_cents: allocation_amount_cents
-              };
-            }
+          const graphql_budget_allocations = getBudgetAllocationsFromModel(
+            model,
+            budget_categories
           );
 
           try {
@@ -260,9 +244,7 @@ const ReceiptNew: React.FC<Props> = props => {
                   user_id: getUserId(),
                   amount_cents,
                   includes_personal_info: !!includes_personal_info,
-                  budget_allocations: {
-                    data: budget_allocations
-                  }
+                  budget_allocations: { data: graphql_budget_allocations }
                 }
               }
             });
