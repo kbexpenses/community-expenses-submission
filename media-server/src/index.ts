@@ -89,7 +89,6 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx, next) => {
-  console.log('test')
   const { userId, roles } = ctx.state;
 
   const [_, fileUserId, fileName] = ctx.path.split("/");
