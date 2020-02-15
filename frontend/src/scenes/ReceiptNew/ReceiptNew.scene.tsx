@@ -199,15 +199,17 @@ const ReceiptNew: React.FC<Props> = props => {
       <AuthImage file_url={fileUrl} />
       <AutoForm
         schema={bridge}
-        modelTransform={(mode: object, model: object) => ({
-          ...model,
-          multiple_categories: multipleCategories
-        })}
         model={{
           date: dayjs().format("YYYY-MM-DD"),
           includes_personal_info: true,
           pay_to_iban,
           pay_to_name
+        }}
+        onChangeModel={(model: ReceiptModel) => {
+          const { multiple_categories } = model;
+          if (multipleCategories !== multiple_categories) {
+            setMultipleCategories(multiple_categories);
+          }
         }}
         onSubmit={async (model: ReceiptModel) => {
           const {
@@ -271,11 +273,7 @@ const ReceiptNew: React.FC<Props> = props => {
         <p>Which project category is this receipt being charged to?</p>
 
         <div>
-          <AutoField
-            name="multiple_categories"
-            checked={multipleCategories}
-            onChange={() => setMultipleCategories(a => !a)}
-          />
+          <AutoField name="multiple_categories" />
           Select this if you need more than one category
         </div>
 
