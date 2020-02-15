@@ -47,6 +47,8 @@ export const formSchemaValidator = (model: ReceiptModel) => {
         0
       );
 
+      const isOverBudget = total_allocations > amount;
+
       budget_allocations?.forEach((budget_allocation, i) => {
         const { amount, budget_category } = budget_allocation;
         if (!amount || amount === 0) {
@@ -63,7 +65,7 @@ export const formSchemaValidator = (model: ReceiptModel) => {
           });
         }
 
-        if (total_allocations > amount) {
+        if (isOverBudget) {
           details.push({
             name: `budget_allocations.${i}.amount`,
             message: "Please allocate less than the total receipt amount"
