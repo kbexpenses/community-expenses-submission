@@ -8,7 +8,7 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     pay_to_notes,
     budget_allocations,
     budget_category,
-    multiple_categories
+    has_multiple_categories
   } = model;
   const details = [];
 
@@ -32,13 +32,13 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     });
   }
 
-  if (multiple_categories) {
+  if (has_multiple_categories) {
     if (
       typeof budget_allocations !== "object" ||
       budget_allocations.length === 0
     ) {
       details.push({
-        name: "multiple_categories",
+        name: "has_multiple_categories",
         message: "Please enter at least 1 budget category"
       });
     } else {
@@ -109,13 +109,13 @@ export const getBudgetAllocationsFromModel = (
   const {
     amount,
     budget_category,
-    multiple_categories,
+    has_multiple_categories,
     budget_allocations
   } = model;
 
   const getBudgetCategory = getBudgetCategoryFactory(budget_categories);
 
-  if (multiple_categories) {
+  if (has_multiple_categories) {
     const { id: budget_category_id } = getBudgetCategory(budget_category);
     const amount_cents = Math.round(amount * 100);
     return {

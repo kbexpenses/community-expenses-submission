@@ -31,7 +31,7 @@ import AuthImage, { MEDIA_URL } from "../../components/AuthImage";
 export type ReceiptModel = {
   amount: number;
   date: string;
-  multiple_categories: boolean;
+  has_multiple_categories: boolean;
   budget_allocations?: {
     budget_category: string;
     amount: number;
@@ -56,7 +56,7 @@ const formSchema = gql`
   type Receipt {
     amount: Float
     date: String
-    multiple_categories: Boolean
+    has_multiple_categories: Boolean
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
     budget_category: String
     includes_personal_info: Boolean
@@ -117,7 +117,7 @@ const ReceiptNew: React.FC<Props> = props => {
   const { classes } = props;
 
   const [fileUrl, setFileUrl] = useState("");
-  const [multipleCategories, setMultipleCategories] = useState(false);
+  const [hasMultipleCategories, setHasMultipleCategories] = useState(false);
 
   const history = useHistory();
 
@@ -206,9 +206,9 @@ const ReceiptNew: React.FC<Props> = props => {
           pay_to_name
         }}
         onChangeModel={(model: ReceiptModel) => {
-          const { multiple_categories } = model;
-          if (multipleCategories !== multiple_categories) {
-            setMultipleCategories(multiple_categories);
+          const { has_multiple_categories } = model;
+          if (hasMultipleCategories !== has_multiple_categories) {
+            setHasMultipleCategories(has_multiple_categories);
           }
         }}
         onSubmit={async (model: ReceiptModel) => {
@@ -216,7 +216,7 @@ const ReceiptNew: React.FC<Props> = props => {
             amount,
             includes_personal_info,
             budget_category,
-            multiple_categories,
+            has_multiple_categories,
             budget_allocations,
             ...object
           } = model;
@@ -273,11 +273,11 @@ const ReceiptNew: React.FC<Props> = props => {
         <p>Which project category is this receipt being charged to?</p>
 
         <div>
-          <AutoField name="multiple_categories" />
+          <AutoField name="has_multiple_categories" />
           Select this if you need more than one category
         </div>
 
-        {!multipleCategories ? (
+        {!hasMultipleCategories ? (
           <SelectField
             name="budget_category"
             label="Budget category"
