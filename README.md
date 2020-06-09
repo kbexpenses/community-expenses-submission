@@ -42,7 +42,7 @@ To run this locally in development you need the following installed:
 * [docker](https://www.docker.com)
   - Including `docker-compose`
 
-You'll need mulitple terminals to run all the pieces. More info below.
+You'll need multiple terminals to run all the pieces. More info below.
 
 ### Config
 
