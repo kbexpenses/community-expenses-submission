@@ -99,6 +99,42 @@ Or if you create our own Auth0 setup, for admin users, set their app_metadata to
 }
 ```
 
+## Deployment
+
+To deploy this application requires the following.
+
+- Setup an Auth0 account and fill the config values into .env
+  - NOTE: The .env setup needs to be fixed for this to work 100% see #4
+  - Copy the JWT secret into the root `.env` file
+- Deploy hasura
+  - Easiest is likely via docker, which requires 2 containers, a postgres
+    container and the hasura container itself
+  - Copy the hasura secret key to the root `.env`
+  - Run the hasura migrations against this server
+    - The migration files are in the `hasura/` folder
+    - There are migration commands above that might help understanding this
+      part
+    - TODO Provide better docs on how to do this
+    - https://hasura.io/docs/1.0/graphql/core/deployment/deployment-guides/docker.html#deployment-docker
+- Deploy an HTTPS termination service in front of hasura
+  - The easiest is probably another docker container
+  - https://hasura.io/docs/1.0/graphql/core/deployment/enable-https.html#enable-https
+  - Copy the public hasura URL into the root `.env`
+- Deploy the media server
+  - This is a simple node script, it could be packaged to run inside a docker
+    container
+- Deploy an HTTPS termination service in front of the media server
+  - Likely using the same strategy as for Hasura
+- Build and deploy the frontend
+  - Set the frontend URL into `.env`
+  - This is most easily done via netlify
+  - If you want to do this manually, the steps are loosely:
+    - Install all dependencies in `frontend/` like `cd frontend && yarn`
+    - Build the frontend `cd frontend && yarn build`
+    - Serve the `build/` folder at a URL with HTTPS enabled
+      - It's purely static files, so any web server or CDN will do
+  - PRs adding a multi stage docker build for this part most welcome
+
 ## User Testing
 
 - Erin Jeavons-Fellows - Chief User Tester (President)
