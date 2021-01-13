@@ -35,9 +35,9 @@ app.use(
       cacheMaxEntries: 5,
       cacheMaxAge: 24 * 60 * 60 * 1e3
     }),
+    // TODO Import these from env vars #37
     audience: "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
     issuer: "https://community-expenses-dev.eu.auth0.com/"
-    // TODO Import this from env vars #37
   })
 );
 
