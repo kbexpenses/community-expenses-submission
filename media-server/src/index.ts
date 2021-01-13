@@ -37,6 +37,7 @@ app.use(
     }),
     audience: "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
     issuer: "https://community-expenses-dev.eu.auth0.com/"
+    // TODO Import this from env vars #37
   })
 );
 
