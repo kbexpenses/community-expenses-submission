@@ -1,6 +1,9 @@
 # community-expenses-submission
 
-Community projects often handle reimbursement of expenses. This process can be labour intensive. The goal of this software is to make this process easier, and allow more people to share the work. We're inspired by the [opencollective](https://opencollective.com/) system.
+Community projects often handle reimbursement of expenses. This process can
+be labour intensive. The goal of this software is to make this process
+easier, and allow more people to share the work. We're inspired by the
+[opencollective](https://opencollective.com/) system.
 
 ## Stack
 
@@ -46,7 +49,11 @@ You'll need multiple terminals to run all the pieces. More info below.
 
 ### Config
 
-To run the app in development, you'll need some config values. They're included in this repo in `.env` at the root. However, to standardise on this, we're planning to copy the config setup from [here](https://github.com/chmac/community-shift-signup). See https://github.com/chmac/community-expenses-submission/issues/4.
+To run the app in development, you'll need some config values. They're
+included in this repo in `.env` at the root. However, to standardise on this,
+we're planning to copy the config setup from
+[here](https://github.com/chmac/community-shift-signup). See
+https://github.com/chmac/community-expenses-submission/issues/4.
 
 ### Data backend
 
