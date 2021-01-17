@@ -2,7 +2,7 @@
   base = "frontend"
   command = "yarn build"
   publish = "build"
-  ignore = "git diff --quiet HEAD^ HEAD -- . ../frontend"
+  ignore = "git diff --quiet HEAD^ HEAD -- . ../frontend netlify.toml"
 [[redirects]]
   from = "/*" 
   to = "/"
