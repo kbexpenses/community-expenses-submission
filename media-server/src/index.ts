@@ -25,7 +25,7 @@ if (
   typeof AUTH0_CLIENT_ID !== "string" ||
   AUTH0_CLIENT_ID.length === 0
 ) {
-  console.error("AUTH0_DOMAIN and AUTH0_CLIENT env var must be set #uMFaST");
+  console.error("AUTH0_DOMAIN and AUTH0_CLIENT_ID env var must be set #uMFaST");
   process.exit();
 }
 
