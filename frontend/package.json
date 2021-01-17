@@ -36,9 +36,9 @@
     "uniforms-material": "^2.6.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env-cmd -f ../.env react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "env-cmd -f ../.env react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
