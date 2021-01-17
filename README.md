@@ -146,7 +146,7 @@ function (user, context, callback) {
     {
       'x-hasura-default-role': 'user',
       // If the user has any app_metadata.roles, add them to the hasura roles
-      'x-hasura-allowed-roles': ['user'].concat(user.app_metadata.roles || []) ,
+      'x-hasura-allowed-roles': ['user'].concat(user && user.app_metadata && user.app_metadata.roles || []) ,
       'x-hasura-user-id': user.user_id
     };
   callback(null, user, context);
