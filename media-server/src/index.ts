@@ -8,8 +8,16 @@ import { koaJwtSecret } from "jwks-rsa";
 import uuid from "uuid/v4";
 import send from "koa-send";
 
+const DEBUG = false;
+
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+
+const MEDIA_PATH =
+  typeof process.env.MEDIA_PATH === "string" &&
+  process.env.MEDIA_PATH.length > 0
+    ? process.env.MEDIA_PATH
+    : "./data/";
 
 if (
   typeof AUTH0_DOMAIN !== "string" ||
@@ -20,9 +28,6 @@ if (
   console.error("AUTH0_DOMAIN and AUTH0_CLIENT env var must be set #uMFaST");
   process.exit();
 }
-
-const MEDIA_PATH = "./data/";
-const DEBUG = false;
 
 const ALLOW_ROLES = ["admin", "editor"];
 
