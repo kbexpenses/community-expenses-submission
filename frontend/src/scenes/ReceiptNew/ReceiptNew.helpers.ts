@@ -115,7 +115,7 @@ export const getBudgetAllocationsFromModel = (
 
   const getBudgetCategory = getBudgetCategoryFactory(budget_categories);
 
-  if (has_multiple_categories) {
+  if (!has_multiple_categories) {
     const { id: budget_category_id } = getBudgetCategory(budget_category);
     const amount_cents = Math.round(amount * 100);
     return {
