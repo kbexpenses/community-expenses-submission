@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon"
+    "start": "env-cmd -f ../.env nodemon"
   },
   "main": "index.js",
   "dependencies": {
@@ -19,6 +19,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "nodemon": "^2.0.2",
     "ts-node": "^8.5.4"
   }
