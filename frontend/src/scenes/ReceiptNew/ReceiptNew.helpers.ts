@@ -8,27 +8,27 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     pay_to_notes,
     budget_allocations,
     budget_category,
-    has_multiple_categories
+    has_multiple_categories,
   } = model;
   const details = [];
 
   if (!amount) {
     details.push({
       name: "amount",
-      message: "Please specify the amount of this receipt"
+      message: "Please specify the amount of this receipt",
     });
   }
   if (!date) {
     details.push({
       name: "date",
-      message: "Please enter the date on the receipt"
+      message: "Please enter the date on the receipt",
     });
   }
   if (!pay_to_iban && !pay_to_notes) {
     details.push({
       name: "pay_to_iban",
       message:
-        "Please enter the IBAN of where we should pay, or specify a note instead."
+        "Please enter the IBAN of where we should pay, or specify a note instead.",
     });
   }
 
@@ -39,7 +39,7 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     ) {
       details.push({
         name: "has_multiple_categories",
-        message: "Please enter at least 1 budget category"
+        message: "Please enter at least 1 budget category",
       });
     } else {
       const total_allocations = budget_allocations.reduce(
@@ -54,21 +54,21 @@ export const formSchemaValidator = (model: ReceiptModel) => {
         if (!amount || amount === 0) {
           details.push({
             name: `budget_allocations.${i}.amount`,
-            message: "Please enter an amount for this budget category"
+            message: "Please enter an amount for this budget category",
           });
         }
 
         if (!budget_category) {
           details.push({
             name: `budget_allocations.${i}.budget_category`,
-            message: "Please select a budget category"
+            message: "Please select a budget category",
           });
         }
 
         if (isOverBudget) {
           details.push({
             name: `budget_allocations.${i}.amount`,
-            message: "Please allocate less than the total receipt amount"
+            message: "Please allocate less than the total receipt amount",
           });
         }
       });
@@ -77,7 +77,7 @@ export const formSchemaValidator = (model: ReceiptModel) => {
     if (!budget_category) {
       details.push({
         name: "budget_category",
-        message: "Please allocate this receipt to at least 1 budget category."
+        message: "Please allocate this receipt to at least 1 budget category.",
       });
     }
   }
@@ -91,7 +91,7 @@ export const formSchemaValidator = (model: ReceiptModel) => {
 const getBudgetCategoryFactory = (budget_categories: BudgetCategory[]) => (
   name?: string
 ): BudgetCategory => {
-  const budget_category = budget_categories.find(budget_category => {
+  const budget_category = budget_categories.find((budget_category) => {
     return name === budget_category.name;
   });
 
@@ -110,17 +110,17 @@ export const getBudgetAllocationsFromModel = (
     amount,
     budget_category,
     has_multiple_categories,
-    budget_allocations
+    budget_allocations,
   } = model;
 
   const getBudgetCategory = getBudgetCategoryFactory(budget_categories);
 
-  if (has_multiple_categories) {
+  if (!has_multiple_categories) {
     const { id: budget_category_id } = getBudgetCategory(budget_category);
     const amount_cents = Math.round(amount * 100);
     return {
       budget_category_id,
-      amount_cents
+      amount_cents,
     };
   }
 
@@ -136,7 +136,7 @@ export const getBudgetAllocationsFromModel = (
 
       return {
         budget_category_id,
-        amount_cents: Math.round(budget_allocation.amount * 100)
+        amount_cents: Math.round(budget_allocation.amount * 100),
       };
     }
   );
