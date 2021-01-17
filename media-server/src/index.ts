@@ -115,6 +115,8 @@ app.use(async (ctx, next) => {
 
 app.listen(4000);
 
-console.log(
-  `Started koa on 4000 #GjsIbU with auth0 domain ${AUTH0_DOMAIN} and client id ${AUTH0_CLIENT_ID}`
-);
+console.log(`Started koa on 4000 #GjsIbU`, {
+  AUTH0_DOMAIN,
+  AUTH0_CLIENT_ID,
+  MEDIA_PATH,
+});
