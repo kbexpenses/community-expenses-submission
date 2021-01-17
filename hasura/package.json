@@ -1,10 +1,11 @@
 {
   "scripts": {
-    "migrate": "env-cmd -f ../.env --use-shell \"hasura migrate --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET\"",
+    "migrate:status": "env-cmd -f ../.env --use-shell \"hasura migrate --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET status\"",
+    "migrate:apply": "env-cmd -f ../.env --use-shell \"hasura migrate --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET apply\"",
     "start": "env-cmd -f ../.env --use-shell \"hasura console --endpoint \\$HASURA_URL --admin-secret \\$HASURA_GRAPHQL_ADMIN_SECRET\""
   },
   "devDependencies": {
     "env-cmd": "^10.0.1",
-    "hasura-cli": "^1.0.0"
+    "hasura-cli": "^1.3.3"
   }
 }
