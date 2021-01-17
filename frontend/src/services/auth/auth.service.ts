@@ -32,9 +32,12 @@ const storage = window.sessionStorage;
 
 const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
   auth: {
-    responseType: "token",
+    responseType: "token id_token",
     redirect: false,
     redirectUrl: FRONTEND_URL,
+    params: {
+      scope: "openid profile email",
+    },
   },
 });
 
