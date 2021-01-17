@@ -5,23 +5,38 @@ import store from "../../store";
 import apollo from "../../apollo";
 import { loginSuccessful, logoutActionCreator } from "./auth.state";
 
+const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN as string;
+const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID as string;
+const FRONTEND_URL = process.env.PUBLIC_URL;
+
+if (
+  typeof AUTH0_DOMAIN !== "string" ||
+  AUTH0_DOMAIN.length === 0 ||
+  typeof AUTH0_CLIENT_ID !== "string" ||
+  AUTH0_CLIENT_ID.length === 0
+) {
+  console.error(
+    `REACT_APP_AUTH0_DOMAIN and REACT_APP_AUTH0_CLIENT_ID must be set #EgglMa`,
+    { AUTH0_DOMAIN, AUTH0_CLIENT_ID }
+  );
+  globalThis.alert(
+    `ERROR\n\nREACT_APP_AUTH0_DOMAIN and REACT_APP_AUTH0_CLIENT_ID are missing. #rWAzIR`
+  );
+}
+
 const TOKEN_STORAGE_KEY = "_authToken";
 const USER_ID_STORAGE_KEY = "_userId";
 const ROLES_STORAGE_KEY = "_roles";
 
 const storage = window.sessionStorage;
 
-const lock = new Auth0Lock(
-  "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
-  "community-expenses-dev.eu.auth0.com",
-  {
-    auth: {
-      responseType: "token",
-      redirect: false,
-      redirectUrl: "http://localhost:3000"
-    }
-  }
-);
+const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+  auth: {
+    responseType: "token",
+    redirect: false,
+    redirectUrl: FRONTEND_URL,
+  },
+});
 
 /*
 lock.on("authorization_error", error => {
@@ -53,7 +68,7 @@ export const showLock = () => {
 export const logout = () => {
   storage.clear();
   store.dispatch(logoutActionCreator());
-  lock.logout({ returnTo: "http://localhost:3000/" });
+  lock.logout({ returnTo: FRONTEND_URL });
 };
 
 export const getToken = () => {
@@ -90,13 +105,13 @@ export const startup = () => {
           }
         `,
         variables: {
-          user_id: userId
-        }
+          user_id: userId,
+        },
       })
-      .then(result => {
+      .then((result) => {
         store.dispatch(loginSuccessful(userId, roles));
       })
-      .catch(error => {
+      .catch((error) => {
         alert(`GraphQL Error #9yhFiw: ${error.message}`);
       });
   }
