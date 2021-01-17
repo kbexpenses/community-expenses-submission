@@ -14,7 +14,7 @@ const DEBUG = false;
 const ALLOW_ROLES = ["admin", "editor"];
 
 const isUserAdminOrEditor = (roles: string[]) => {
-  return !!ALLOW_ROLES.find(role => {
+  return !!ALLOW_ROLES.find((role) => {
     if (roles.indexOf(role) !== -1) {
       return true;
     }
@@ -33,7 +33,7 @@ app.use(
         "https://community-expenses-dev.eu.auth0.com/.well-known/jwks.json",
       cache: true,
       cacheMaxEntries: 5,
-      cacheMaxAge: 24 * 60 * 60 * 1e3
+      cacheMaxAge: 24 * 60 * 60 * 1e3,
     }),
     // TODO Import these from env vars #37
     audience: "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
