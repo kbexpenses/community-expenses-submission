@@ -1,0 +1,24 @@
+version: "2"
+
+networks:
+  mediaserver:
+    external: false
+
+services:
+  server:
+    image: chmac/community-expenses-submission-server:latest
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - MEDIA_PATH="/data/"
+      - AUTH0_DOMAIN=""
+      - AUTH0_CLIENT_ID=""
+    restart: always
+    networks:
+      - mediaserver
+    volumes:
+      - ./data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "4700:4000"
