@@ -90,13 +90,13 @@ export const startup = () => {
           }
         `,
         variables: {
-          user_id: userId
-        }
+          user_id: userId,
+        },
       })
-      .then(result => {
+      .then((result) => {
         store.dispatch(loginSuccessful(userId, roles));
       })
-      .catch(error => {
+      .catch((error) => {
         alert(`GraphQL Error #9yhFiw: ${error.message}`);
       });
   }
