@@ -13,6 +13,7 @@ const DEBUG = false;
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 
+// NOTE: This must be relative or `koa-send` will fail
 const MEDIA_PATH =
   typeof process.env.MEDIA_PATH === "string" &&
   process.env.MEDIA_PATH.length > 0
