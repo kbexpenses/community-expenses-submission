@@ -93,7 +93,7 @@ app.use(async (ctx, next) => {
 app.use(async (ctx, next) => {
   const { userId, roles } = ctx.state;
 
-  const [_, fileUserId, fileName] = ctx.path.split("/");
+  const [, fileUserId, fileName] = ctx.path.split("/");
 
   if (!fileUserId || !fileName) {
     if (DEBUG) console.log("Not found #j2o4dm", ctx.path);
