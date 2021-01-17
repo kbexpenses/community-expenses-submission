@@ -8,6 +8,19 @@ import { koaJwtSecret } from "jwks-rsa";
 import uuid from "uuid/v4";
 import send from "koa-send";
 
+const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+
+if (
+  typeof AUTH0_DOMAIN !== "string" ||
+  AUTH0_DOMAIN.length === 0 ||
+  typeof AUTH0_CLIENT_ID !== "string" ||
+  AUTH0_CLIENT_ID.length === 0
+) {
+  console.error("AUTH0_DOMAIN and AUTH0_CLIENT env var must be set #uMFaST");
+  process.exit();
+}
+
 const MEDIA_PATH = "./data/";
 const DEBUG = false;
 
@@ -29,15 +42,14 @@ app.use(cors());
 app.use(
   jwt({
     secret: koaJwtSecret({
-      jwksUri:
-        "https://community-expenses-dev.eu.auth0.com/.well-known/jwks.json",
+      jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
       cache: true,
       cacheMaxEntries: 5,
       cacheMaxAge: 24 * 60 * 60 * 1e3,
     }),
     // TODO Import these from env vars #37
-    audience: "mZeX1QFQKvmzwjZKYRcvmzYsO8d1Ygox",
-    issuer: "https://community-expenses-dev.eu.auth0.com/"
+    audience: AUTH0_CLIENT_ID,
+    issuer: `https://${AUTH0_DOMAIN}/`,
   })
 );
 
