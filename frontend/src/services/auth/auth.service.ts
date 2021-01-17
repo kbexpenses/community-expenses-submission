@@ -42,15 +42,22 @@ const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
 });
 
 /*
-lock.on("authorization_error", error => {
+lock.on("authorization_error", (error) => {
   debugger;
 });
-lock.on("unrecoverable_error", error => {
+lock.on("unrecoverable_error", (error) => {
   debugger;
 });
 */
 
 lock.on("authenticated", (authResult: AuthResult) => {
+  if (typeof authResult.idTokenPayload === "undefined") {
+    alert(
+      `ERROR\n\nThere was an unexpected error during login. Please try again. If this fails again, please let us know and send us the error code: #efi8Kg`
+    );
+    throw new Error("Missing idTokenPayload #ajk9nu");
+  }
+
   const userId = authResult.idTokenPayload.sub;
   const roles = (authResult.idTokenPayload as any)[
     "https://hasura.io/jwt/claims"

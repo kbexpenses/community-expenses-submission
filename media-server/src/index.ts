@@ -13,6 +13,7 @@ const DEBUG = false;
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 
+// NOTE: This must be relative or `koa-send` will fail
 const MEDIA_PATH =
   typeof process.env.MEDIA_PATH === "string" &&
   process.env.MEDIA_PATH.length > 0
@@ -25,7 +26,7 @@ if (
   typeof AUTH0_CLIENT_ID !== "string" ||
   AUTH0_CLIENT_ID.length === 0
 ) {
-  console.error("AUTH0_DOMAIN and AUTH0_CLIENT env var must be set #uMFaST");
+  console.error("AUTH0_DOMAIN and AUTH0_CLIENT_ID env var must be set #uMFaST");
   process.exit();
 }
 
@@ -93,7 +94,7 @@ app.use(async (ctx, next) => {
 app.use(async (ctx, next) => {
   const { userId, roles } = ctx.state;
 
-  const [_, fileUserId, fileName] = ctx.path.split("/");
+  const [, fileUserId, fileName] = ctx.path.split("/");
 
   if (!fileUserId || !fileName) {
     if (DEBUG) console.log("Not found #j2o4dm", ctx.path);
@@ -115,6 +116,8 @@ app.use(async (ctx, next) => {
 
 app.listen(4000);
 
-console.log(
-  `Started koa on 4000 #GjsIbU with auth0 domain ${AUTH0_DOMAIN} and client id ${AUTH0_CLIENT_ID}`
-);
+console.log(`Started koa on 4000 #GjsIbU`, {
+  AUTH0_DOMAIN,
+  AUTH0_CLIENT_ID,
+  MEDIA_PATH,
+});
