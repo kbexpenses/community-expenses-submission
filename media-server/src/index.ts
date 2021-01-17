@@ -52,7 +52,6 @@ app.use(
       cacheMaxEntries: 5,
       cacheMaxAge: 24 * 60 * 60 * 1e3,
     }),
-    // TODO Import these from env vars #37
     audience: AUTH0_CLIENT_ID,
     issuer: `https://${AUTH0_DOMAIN}/`,
   })
@@ -116,4 +115,6 @@ app.use(async (ctx, next) => {
 
 app.listen(4000);
 
-console.log("Started koa on 4000 #GjsIbU");
+console.log(
+  `Started koa on 4000 #GjsIbU with auth0 domain ${AUTH0_DOMAIN} and client id ${AUTH0_CLIENT_ID}`
+);
