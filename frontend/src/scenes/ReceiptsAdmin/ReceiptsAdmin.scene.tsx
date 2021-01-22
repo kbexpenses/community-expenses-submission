@@ -26,6 +26,7 @@ export type ReceiptReturn = {
   user_id: string;
   number: number;
   amount_cents: number;
+  description: string;
   is_legally_compliant?: boolean;
   paper_copy_received?: boolean;
   has_been_paid?: boolean;
@@ -51,6 +52,7 @@ const ReceiptAdminQuery = gql`
       id
       number
       amount_cents
+      description
       is_legally_compliant
       paper_copy_received
       has_been_paid

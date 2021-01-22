@@ -39,6 +39,7 @@ const ReceiptItem = (props: Props) => {
         <Link to={`/receipts/${receipt.id}`}>Number: {receipt.number}</Link>
       </div>
       <div>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</div>
+      <div>Description: {receipt.description}</div>
       <div>
         Name: {receipt.user_profile?.name} ({receipt.user_profile?.email} /{" "}
         {receipt.user_profile?.phone_number})
