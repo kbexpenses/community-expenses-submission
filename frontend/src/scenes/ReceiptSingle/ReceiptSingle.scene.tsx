@@ -52,7 +52,7 @@ const ReceiptSingle = (props: Props) => {
   const id = props.match.params.id;
 
   const { loading, error, data } = useQuery(ReceiptSingleQuery, {
-    variables: { id }
+    variables: { id },
   });
 
   if (error) {
@@ -92,7 +92,7 @@ const ReceiptSingle = (props: Props) => {
       <p>Pay to IBAN: {receipt.pay_to_iban}</p>
       <p>Categories</p>
       <ul>
-        {receipt?.budget_allocations?.map(allocation => {
+        {receipt?.budget_allocations?.map((allocation) => {
           return (
             <li key={allocation.id}>
               {allocation.budget_category.name} (€
