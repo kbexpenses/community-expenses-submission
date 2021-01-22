@@ -24,6 +24,7 @@ const Bar: React.FC<Props> = (props) => {
               Community Expenses
             </Typography>
           </Link>
+          {process.env.REACT_APP_COMMIT_REF || "dev"}
           {isAdmin ? (
             <Link to="/receipts/admin">
               <Button color="inherit">Receipts</Button>
