@@ -12,7 +12,7 @@ import { AppState } from "../../store";
 import { showLock, logout } from "../../services/auth/auth.service";
 import { doesUserHaveRole } from "../../services/auth/auth.state";
 
-const Bar: React.FC<Props> = props => {
+const Bar: React.FC<Props> = (props) => {
   const { classes, isLoggedIn, isAdmin } = props;
 
   return (
@@ -68,18 +68,18 @@ const Bar: React.FC<Props> = props => {
 const mapStateToProps = (state: AppState) => {
   return {
     isLoggedIn: state.auth.isLoggedIn,
-    isAdmin: doesUserHaveRole(state, "admin")
+    isAdmin: doesUserHaveRole(state, "admin"),
   };
 };
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     title: {
-      flexGrow: 1
-    }
+      flexGrow: 1,
+    },
   });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
