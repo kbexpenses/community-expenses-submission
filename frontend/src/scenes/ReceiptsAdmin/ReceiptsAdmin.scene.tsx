@@ -14,7 +14,7 @@ import { userHasRole } from "../../services/auth/auth.service";
 import ReceiptItem from "./components/ReceiptItem.component";
 import {
   applyFilterToReceipts,
-  applySearchToReceipts
+  applySearchToReceipts,
 } from "./ReceiptAdmin.helpers";
 
 export const IS_LEGALLY_COMPLIANT = "is_legally_compliant";
@@ -157,7 +157,7 @@ const ReceiptAdmin = (props: Props) => {
           Search:{" "}
           <input
             value={search}
-            onChange={e => {
+            onChange={(e) => {
               setSearch(e.target.value);
             }}
           />
@@ -184,32 +184,32 @@ const styles = (theme: Theme) =>
   createStyles({
     padder: {
       padding: theme.spacing(2),
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     markLegallyValid: {
       backgroundColor: green[500],
       "&:hover": {
-        backgroundColor: green[500]
-      }
+        backgroundColor: green[500],
+      },
     },
     green: {
       backgroundColor: green[500],
       "&:hover": {
-        backgroundColor: green[500]
-      }
+        backgroundColor: green[500],
+      },
     },
     grey: {
       backgroundColor: grey[200],
       "&:hover": {
-        backgroundColor: grey[200]
-      }
+        backgroundColor: grey[200],
+      },
     },
     markLegallyInvalid: {
       backgroundColor: red[500],
       "&:hover": {
-        backgroundColor: red[500]
-      }
-    }
+        backgroundColor: red[500],
+      },
+    },
   });
 
 type Props = WithStyles<typeof styles>;
