@@ -13,6 +13,7 @@ const ReceiptSingleQuery = gql`
       date
       file_url
       amount_cents
+      description
       pay_to_name
       pay_to_iban
       budget_allocations {
@@ -34,6 +35,7 @@ type ReceiptReturn = {
   date: string;
   file_url: string;
   amount_cents: number;
+  description: string;
   pay_to_name: string;
   pay_to_iban: string;
   budget_allocations?: {
@@ -85,6 +87,7 @@ const ReceiptSingle = (props: Props) => {
       <p>Receipt Number: {receipt.number}</p>
       <p>Receipt date: {receipt.date}</p>
       <p>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</p>
+      <div>Description: {receipt.description}</div>
       <p>Pay to Name: {receipt.pay_to_name}</p>
       <p>Pay to IBAN: {receipt.pay_to_iban}</p>
       <p>Categories</p>
