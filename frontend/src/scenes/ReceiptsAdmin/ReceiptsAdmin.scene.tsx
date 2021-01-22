@@ -14,7 +14,7 @@ import { userHasRole } from "../../services/auth/auth.service";
 import ReceiptItem from "./components/ReceiptItem.component";
 import {
   applyFilterToReceipts,
-  applySearchToReceipts
+  applySearchToReceipts,
 } from "./ReceiptAdmin.helpers";
 
 export const IS_LEGALLY_COMPLIANT = "is_legally_compliant";
@@ -26,6 +26,7 @@ export type ReceiptReturn = {
   user_id: string;
   number: number;
   amount_cents: number;
+  description: string;
   is_legally_compliant?: boolean;
   paper_copy_received?: boolean;
   has_been_paid?: boolean;
@@ -38,6 +39,11 @@ export type ReceiptReturn = {
     email?: string;
     phone_number?: string;
   };
+  budget_allocations: {
+    budget_category: {
+      name: string;
+    };
+  }[];
 };
 
 const ReceiptAdminQuery = gql`
@@ -46,6 +52,7 @@ const ReceiptAdminQuery = gql`
       id
       number
       amount_cents
+      description
       is_legally_compliant
       paper_copy_received
       has_been_paid
@@ -57,6 +64,11 @@ const ReceiptAdminQuery = gql`
         name
         email
         phone_number
+      }
+      budget_allocations {
+        budget_category {
+          name
+        }
       }
     }
   }
@@ -157,7 +169,7 @@ const ReceiptAdmin = (props: Props) => {
           Search:{" "}
           <input
             value={search}
-            onChange={e => {
+            onChange={(e) => {
               setSearch(e.target.value);
             }}
           />
@@ -184,32 +196,32 @@ const styles = (theme: Theme) =>
   createStyles({
     padder: {
       padding: theme.spacing(2),
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     markLegallyValid: {
       backgroundColor: green[500],
       "&:hover": {
-        backgroundColor: green[500]
-      }
+        backgroundColor: green[500],
+      },
     },
     green: {
       backgroundColor: green[500],
       "&:hover": {
-        backgroundColor: green[500]
-      }
+        backgroundColor: green[500],
+      },
     },
     grey: {
       backgroundColor: grey[200],
       "&:hover": {
-        backgroundColor: grey[200]
-      }
+        backgroundColor: grey[200],
+      },
     },
     markLegallyInvalid: {
       backgroundColor: red[500],
       "&:hover": {
-        backgroundColor: red[500]
-      }
-    }
+        backgroundColor: red[500],
+      },
+    },
   });
 
 type Props = WithStyles<typeof styles>;

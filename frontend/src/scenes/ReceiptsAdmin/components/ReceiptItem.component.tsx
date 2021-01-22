@@ -29,16 +29,22 @@ type Props = {
 const ReceiptItem = (props: Props) => {
   const { receipt, classes } = props;
 
+  const category_names = receipt.budget_allocations.map(
+    (allocation) => allocation.budget_category.name
+  );
+
   return (
     <Paper key={receipt.id} className={classes.padder}>
       <div>
         <Link to={`/receipts/${receipt.id}`}>Number: {receipt.number}</Link>
       </div>
       <div>Amount: €{(receipt.amount_cents / 100).toFixed(2)}</div>
+      <div>Description: {receipt.description}</div>
       <div>
         Name: {receipt.user_profile?.name} ({receipt.user_profile?.email} /{" "}
         {receipt.user_profile?.phone_number})
       </div>
+      <div>Budget categories: {category_names.join("; ")}</div>
       <div>Pay to name: {receipt.pay_to_name}</div>
       <div>Pay to IBAN: {receipt.pay_to_iban}</div>
       <div>Pay to notes: {receipt.pay_to_notes}</div>

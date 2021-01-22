@@ -13,7 +13,7 @@ import {
   ListField,
   NestField,
   SelectField,
-  ListDelField
+  ListDelField,
 } from "uniforms-material";
 import { withStyles, Theme, createStyles, WithStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -21,7 +21,7 @@ import { useHistory } from "react-router-dom";
 
 import {
   formSchemaValidator,
-  getBudgetAllocationsFromModel
+  getBudgetAllocationsFromModel,
 } from "./ReceiptNew.helpers";
 import { getUserId, getToken } from "../../services/auth/auth.service";
 import ErrorsField from "../../components/ErrorsField.component";
@@ -56,6 +56,7 @@ const formSchema = gql`
   type Receipt {
     amount: Float
     date: String
+    description: String
     has_multiple_categories: Boolean
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
     budget_category: String
@@ -69,17 +70,20 @@ const formSchemaType = buildASTSchema(formSchema).getType("Receipt");
 const formSchemaExtras = {
   date: {
     type: "Date",
-    label: "Date of receipt"
+    label: "Date of receipt",
   },
   amount: {
-    label: "Amount of this receipt in EUR"
+    label: "Amount of this receipt in EUR",
+  },
+  description: {
+    label: "A short description of what this receipt is for",
   },
   pay_to_name: { label: "Repayment Name" },
   pay_to_iban: { label: "Repayment to IBAN" },
   pay_to_notes: {
     label: "Any extra information for repayment",
-    multiline: true
-  }
+    multiline: true,
+  },
 };
 
 const bridge = new GraphQLBridge(
@@ -113,7 +117,7 @@ const NewReceiptMutation = gql`
   }
 `;
 
-const ReceiptNew: React.FC<Props> = props => {
+const ReceiptNew: React.FC<Props> = (props) => {
   const { classes } = props;
 
   const [fileUrl, setFileUrl] = useState("");
@@ -129,28 +133,28 @@ const ReceiptNew: React.FC<Props> = props => {
     { user_id?: string | null }
   >(NewReceiptQuery, {
     variables: {
-      user_id: getUserId()
+      user_id: getUserId(),
     },
-    fetchPolicy: "cache-and-network"
+    fetchPolicy: "cache-and-network",
   });
   const [insertReceipt] = useMutation(NewReceiptMutation);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: ["image/*"],
     multiple: false,
-    onDropAccepted: files => {
+    onDropAccepted: (files) => {
       const data = new FormData();
       data.append("file", files[0]);
       axios
         .post(MEDIA_URL, data, {
           headers: {
-            Authorization: `Bearer ${getToken()}`
-          }
+            Authorization: `Bearer ${getToken()}`,
+          },
         })
-        .then(response => {
+        .then((response) => {
           setFileUrl(response.data.fileUrl);
         });
-    }
+    },
   });
 
   if (error) {
@@ -169,7 +173,7 @@ const ReceiptNew: React.FC<Props> = props => {
   }
 
   const { budget_categories } = data;
-  const budget_categories_names = budget_categories.map(b => b.name);
+  const budget_categories_names = budget_categories.map((b) => b.name);
   const { iban: pay_to_iban, name: pay_to_name } = data.user_profiles[0] || {};
 
   if (fileUrl === "") {
@@ -203,7 +207,7 @@ const ReceiptNew: React.FC<Props> = props => {
           date: dayjs().format("YYYY-MM-DD"),
           includes_personal_info: true,
           pay_to_iban,
-          pay_to_name
+          pay_to_name,
         }}
         onChangeModel={(model: ReceiptModel) => {
           const { has_multiple_categories } = model;
@@ -247,9 +251,9 @@ const ReceiptNew: React.FC<Props> = props => {
                   user_id: getUserId(),
                   amount_cents,
                   includes_personal_info: !!includes_personal_info,
-                  budget_allocations: { data: graphql_budget_allocations }
-                }
-              }
+                  budget_allocations: { data: graphql_budget_allocations },
+                },
+              },
             });
             alert("Submission success");
             const receiptId = response.data.insert_receipts.returning[0].id;
@@ -262,6 +266,7 @@ const ReceiptNew: React.FC<Props> = props => {
         <h3>Details</h3>
         <NumField decimal name="amount" />
         <AutoField name="date" />
+        <AutoField name="description" />
 
         <h3>Payment</h3>
         <p>Input the details of how this invoice should be paid.</p>
@@ -335,16 +340,16 @@ const styles = (theme: Theme) =>
       maxWidth: "450px",
       paddingBottom: "80px",
       marginLeft: "auto",
-      marginRight: "auto"
+      marginRight: "auto",
     },
     title: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     submit: {
-      marginTop: "20px"
+      marginTop: "20px",
     },
     submitWrapper: {
-      textAlign: "center"
+      textAlign: "center",
     },
     uploader: {
       width: "90%",
@@ -355,8 +360,8 @@ const styles = (theme: Theme) =>
       borderWidth: "12px",
       borderStyle: "dotted",
       padding: "60px 20px",
-      textAlign: "center"
-    }
+      textAlign: "center",
+    },
   });
 
 type Props = WithStyles<typeof styles>;
