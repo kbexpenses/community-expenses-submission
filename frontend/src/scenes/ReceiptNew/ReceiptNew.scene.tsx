@@ -56,6 +56,7 @@ const formSchema = gql`
   type Receipt {
     amount: Float
     date: String
+    description: String
     has_multiple_categories: Boolean
     budget_allocations: [ReceiptBudgetCategoryAllocation!]
     budget_category: String
@@ -73,6 +74,9 @@ const formSchemaExtras = {
   },
   amount: {
     label: "Amount of this receipt in EUR",
+  },
+  description: {
+    label: "A short description of what this receipt is for",
   },
   pay_to_name: { label: "Repayment Name" },
   pay_to_iban: { label: "Repayment to IBAN" },
@@ -262,6 +266,7 @@ const ReceiptNew: React.FC<Props> = (props) => {
         <h3>Details</h3>
         <NumField decimal name="amount" />
         <AutoField name="date" />
+        <AutoField name="description" />
 
         <h3>Payment</h3>
         <p>Input the details of how this invoice should be paid.</p>
