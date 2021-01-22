@@ -38,6 +38,11 @@ export type ReceiptReturn = {
     email?: string;
     phone_number?: string;
   };
+  budget_allocations: {
+    budget_category: {
+      name: string;
+    };
+  }[];
 };
 
 const ReceiptAdminQuery = gql`
@@ -57,6 +62,11 @@ const ReceiptAdminQuery = gql`
         name
         email
         phone_number
+      }
+      budget_allocations {
+        budget_category {
+          name
+        }
       }
     }
   }
